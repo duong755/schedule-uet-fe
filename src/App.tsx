@@ -197,6 +197,7 @@ const App = () => {
       <div className="form">
         <input
           type="text"
+          placeholder="Enter your student code"
           className="form--input"
           value={studentCode}
           onChange={handleChangeStudentCode}
