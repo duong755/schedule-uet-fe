@@ -47,36 +47,64 @@ const App = () => {
               NgaySinh: firstItem.NgaySinh,
             });
 
-            setClasses(
-              json.data
-                .filter((responseItem) => {
-                  return !!responseItem.ThongTinLopHoc;
-                })
-                .map((responseItem) => {
-                  const ThuAsNumber = Number(responseItem.ThongTinLopHoc.Thu)
-                    ? Number(responseItem.ThongTinLopHoc.Thu)
-                    : 8;
-                  const TietAsArray = convertPeriodsFromStringToArray(
-                    responseItem.ThongTinLopHoc.Tiet as string
-                  );
-                  return {
-                    ...responseItem.ThongTinLopHoc,
-                    Thu: ThuAsNumber,
-                    Tiet: TietAsArray,
-                  };
-                })
-                .sort((classItem1, classItem2) => {
-                  //
-                  // ORDER BY
-                  // Tiet: ASCENDING
-                  // Thu: ASCENDING
-                  //
-                  if (classItem1.Tiet[0] === classItem2.Tiet[0]) {
-                    return classItem1.Thu - classItem2.Thu;
+            const result = json.data
+              .filter((responseItem) => {
+                return !!responseItem.ThongTinLopHoc;
+              })
+              .map((responseItem) => {
+                const convertItem = responseItem.ThongTinLopHoc.map(
+                  (item, idx) => {
+                    const ThuAsNumber = Number(item.Thu) ? Number(item.Thu) : 8;
+                    const TietAsArray = convertPeriodsFromStringToArray(
+                      item.Tiet as string
+                    );
+                    return {
+                      ...item,
+                      Thu: ThuAsNumber,
+                      Tiet: TietAsArray,
+                    };
                   }
-                  return classItem1.Tiet[0] - classItem2.Tiet[0];
-                })
-            );
+                );
+                return [...convertItem];
+
+                // const ThuAsNumber = Number(responseItem.ThongTinLopHoc.Thu)
+                //   ? Number(responseItem.ThongTinLopHoc.Thu)
+                //   : 8;
+                // const TietAsArray = convertPeriodsFromStringToArray(
+                //   responseItem.ThongTinLopHoc.Tiet as string
+                // );
+                // return {
+                //   ...responseItem.ThongTinLopHoc,
+                //   Thu: ThuAsNumber,
+                //   Tiet: TietAsArray,
+                // };
+              })
+              .flat()
+              .sort((classItem1, classItem2) => {
+                //
+                // ORDER BY
+                // Tiet: ASCENDING
+                // Thu: ASCENDING
+                //
+                if (classItem1.Tiet[0] === classItem2.Tiet[0]) {
+                  return classItem1.Thu - classItem2.Thu;
+                }
+                return classItem1.Tiet[0] - classItem2.Tiet[0];
+              });
+
+            // .sort((classItem1, classItem2) => {
+            //   //
+            //   // ORDER BY
+            //   // Tiet: ASCENDING
+            //   // Thu: ASCENDING
+            //   //
+            //   if (classItem1.Tiet[0] === classItem2.Tiet[0]) {
+            //     return classItem1.Thu - classItem2.Thu;
+            //   }
+            //   return classItem1.Tiet[0] - classItem2.Tiet[0];
+            // });
+            console.log(result);
+            setClasses(result);
           }
         }
       })
@@ -84,7 +112,7 @@ const App = () => {
         console.error(err);
       })
       .finally(() => {
-        setStudentCode('');
+        setStudentCode("");
         setIsFetching(false);
       });
   }, [studentCode]);
@@ -155,11 +183,15 @@ const App = () => {
         </div>
         <div className="header--credit">
           <div>
-            <a href="https://github.com/hoangnx30/schedule-uet">Nguyễn Xuân Hoàng</a>
+            <a href="https://github.com/hoangnx30/schedule-uet">
+              Nguyễn Xuân Hoàng
+            </a>
           </div>
           <div>
-            <a href="https://github.com/duong755/schedule-uet-fe">Ngô Quang Dương</a>
-            </div>
+            <a href="https://github.com/duong755/schedule-uet-fe">
+              Ngô Quang Dương
+            </a>
+          </div>
         </div>
       </div>
       <div className="form">

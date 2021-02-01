@@ -29,7 +29,7 @@ export type ResponseItem = {
   TenMonHoc: string;
   _id: string;
   id: string;
-  ThongTinLopHoc: ClassInfo;
+  ThongTinLopHoc: ClassInfo[];
 };
 
 export type Response = {
