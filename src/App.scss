@@ -1,0 +1,53 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .header--credit {
+        text-align: right;
+        a {
+            color: #0099ff;
+        }
+    }
+}
+
+.form {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.student {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.classes {
+    table {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #000000;
+        border-collapse: collapse;
+        thead {
+            tr {
+                border-collapse: collapse;
+                th {
+                    border: 1px solid #000000;
+                    padding: 10px 10px;
+                }
+            }
+        }
+        tbody {
+            tr {
+                border-collapse: collapse;
+                td {
+                    border: 1px solid #000000;
+                    padding: 10px 10px;
+                }
+                td.subject:hover {
+                    background-color: #0099ff;
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+}
