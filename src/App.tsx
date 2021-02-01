@@ -24,8 +24,8 @@ const App = () => {
     setStudentCode(event.target.value);
   };
 
-  const handleSubmitStudentCode = useCallback<
-    (event: React.MouseEvent<HTMLButtonElement>) => void
+  const getSchedule = useCallback<
+    () => void
   >(() => {
     setIsFetching(true);
     axios
@@ -53,7 +53,7 @@ const App = () => {
               })
               .map((responseItem) => {
                 const convertItem = responseItem.ThongTinLopHoc.map(
-                  (item, idx) => {
+                  (item) => {
                     const ThuAsNumber = Number(item.Thu) ? Number(item.Thu) : 8;
                     const TietAsArray = convertPeriodsFromStringToArray(
                       item.Tiet as string
@@ -66,18 +66,6 @@ const App = () => {
                   }
                 );
                 return [...convertItem];
-
-                // const ThuAsNumber = Number(responseItem.ThongTinLopHoc.Thu)
-                //   ? Number(responseItem.ThongTinLopHoc.Thu)
-                //   : 8;
-                // const TietAsArray = convertPeriodsFromStringToArray(
-                //   responseItem.ThongTinLopHoc.Tiet as string
-                // );
-                // return {
-                //   ...responseItem.ThongTinLopHoc,
-                //   Thu: ThuAsNumber,
-                //   Tiet: TietAsArray,
-                // };
               })
               .flat()
               .sort((classItem1, classItem2) => {
@@ -91,19 +79,6 @@ const App = () => {
                 }
                 return classItem1.Tiet[0] - classItem2.Tiet[0];
               });
-
-            // .sort((classItem1, classItem2) => {
-            //   //
-            //   // ORDER BY
-            //   // Tiet: ASCENDING
-            //   // Thu: ASCENDING
-            //   //
-            //   if (classItem1.Tiet[0] === classItem2.Tiet[0]) {
-            //     return classItem1.Thu - classItem2.Thu;
-            //   }
-            //   return classItem1.Tiet[0] - classItem2.Tiet[0];
-            // });
-            console.log(result);
             setClasses(result);
           }
         }
@@ -122,7 +97,7 @@ const App = () => {
     const defaultRow: string[] = [...Array(8)].map(() => "<td></td>");
     const table: string[][] = [...Array<string[]>(12)].map((_, rowIndex) => {
       const newRow: string[] = defaultRow.slice(0);
-      newRow[0] = `<td>${rowIndex + 1}</td>`;
+      newRow[0] = `<td class="period">${rowIndex + 1}</td>`;
       return newRow;
     });
 
@@ -140,9 +115,9 @@ const App = () => {
             ] = `<td class="subject" rowspan="${lastPeriod - firstPeriod + 1}">
               <div>
                 <strong>${MaLopMH}</strong>
-                <div>${TenMonHoc}</div>
-                <div>${GiangDuong}</div>
-                <div>${GiaoVien}</div>
+                <div class="subject--name">${TenMonHoc}</div>
+                <div class="subject--room">${GiangDuong}</div>
+                <div class="subject--lecturer">${GiaoVien}</div>
                 <div>Số sinh viên: ${SoSV}</div>
               </div>
             </td>`;
@@ -171,12 +146,17 @@ const App = () => {
     }
   }, [classes]);
 
+  const handleSubmitStudentCode: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
+    event.preventDefault();
+    getSchedule();
+  };
+
   return (
     <>
       <div className="header">
         <div className="header--title">
           <h3>
-            Thời khóa biểu học kì {semester}, năm học{" "}
+            Thời khóa biểu UET, học kì {semester}, năm học{" "}
             {semester === 1 ? year : year - 1}-
             {semester === 1 ? year + 1 : year}
           </h3>
@@ -194,17 +174,19 @@ const App = () => {
           </div>
         </div>
       </div>
-      <div className="form">
-        <input
-          type="text"
-          placeholder="Enter your student code"
-          className="form--input"
-          value={studentCode}
-          onChange={handleChangeStudentCode}
-        />
-        <button className="form--button" onClick={handleSubmitStudentCode}>
-          Lấy thời khóa biểu
-        </button>
+      <div>
+        <form onSubmit={handleSubmitStudentCode}>
+          <input
+            type="text"
+            placeholder="Nhập mã số sinh viên"
+            className="form--input"
+            value={studentCode}
+            onChange={handleChangeStudentCode}
+          />
+          <button className="form--button" onClick={getSchedule}>
+            Lấy thời khóa biểu
+          </button>
+        </form>
       </div>
       <div
         className="fetching"

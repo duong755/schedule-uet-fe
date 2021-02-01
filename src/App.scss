@@ -7,13 +7,32 @@
         text-align: right;
         a {
             color: #0099ff;
+            text-decoration: none;
         }
     }
 }
 
-.form {
+form {
     padding-top: 10px;
     padding-bottom: 10px;
+    width: 100%;
+    display: flex;
+    .form--input {
+        height: 30px;
+        flex: 1;
+        border-radius: 0;
+        border: 1px solid #333333;
+    }
+    .form--button {
+        margin-left: 10px;
+        border-radius: 0;
+        border: 0;
+        background-color: #0099ff;
+        color: #ffffff;
+        &:focus {
+            outline: 0;
+        }
+    }
 }
 
 .student {
@@ -23,7 +42,6 @@
 
 .classes {
     table {
-        width: 100%;
         box-sizing: border-box;
         border: 1px solid #000000;
         border-collapse: collapse;
@@ -33,6 +51,12 @@
                 th {
                     border: 1px solid #000000;
                     padding: 10px 10px;
+                    &:nth-child(1) {
+                        width: 20px;
+                    }
+                    &:nth-child(n+2) {
+                        width: 200px;
+                    }
                 }
             }
         }
@@ -42,6 +66,17 @@
                 td {
                     border: 1px solid #000000;
                     padding: 10px 10px;
+                    &.period {
+                        text-align:center;
+                    }
+                }
+                td.subject {
+                    .subject--name {
+                        text-decoration: underline;
+                    }
+                    .subject--lecturer {
+                        font-style: italic;
+                    }
                 }
                 td.subject:hover {
                     background-color: #0099ff;
