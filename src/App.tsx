@@ -115,7 +115,7 @@ const App = () => {
                 <div>${TenMonHoc}</div>
                 <div>${GiangDuong}</div>
                 <div>${GiaoVien}</div>
-                <div>${SoSV}</div>
+                <div>Số sinh viên: ${SoSV}</div>
               </div>
             </td>`;
           } else {
