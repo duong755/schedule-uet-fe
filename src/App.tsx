@@ -84,6 +84,7 @@ const App = () => {
         console.error(err);
       })
       .finally(() => {
+        setStudentCode('');
         setIsFetching(false);
       });
   }, [studentCode]);
