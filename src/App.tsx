@@ -24,9 +24,7 @@ const App = () => {
     setStudentCode(event.target.value);
   };
 
-  const getSchedule = useCallback<
-    () => void
-  >(() => {
+  const getSchedule = useCallback<() => void>(() => {
     setIsFetching(true);
     axios
       .post(API_URL, {
@@ -52,19 +50,17 @@ const App = () => {
                 return !!responseItem.ThongTinLopHoc;
               })
               .map((responseItem) => {
-                const convertItem = responseItem.ThongTinLopHoc.map(
-                  (item) => {
-                    const ThuAsNumber = Number(item.Thu) ? Number(item.Thu) : 8;
-                    const TietAsArray = convertPeriodsFromStringToArray(
-                      item.Tiet as string
-                    );
-                    return {
-                      ...item,
-                      Thu: ThuAsNumber,
-                      Tiet: TietAsArray,
-                    };
-                  }
-                );
+                const convertItem = responseItem.ThongTinLopHoc.map((item) => {
+                  const ThuAsNumber = Number(item.Thu) ? Number(item.Thu) : 8;
+                  const TietAsArray = convertPeriodsFromStringToArray(
+                    item.Tiet as string
+                  );
+                  return {
+                    ...item,
+                    Thu: ThuAsNumber,
+                    Tiet: TietAsArray,
+                  };
+                });
                 return [...convertItem];
               })
               .flat()
@@ -146,9 +142,38 @@ const App = () => {
     }
   }, [classes]);
 
-  const handleSubmitStudentCode: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
+  const handleSubmitStudentCode: (
+    event: React.FormEvent<HTMLFormElement>
+  ) => void = (event) => {
     event.preventDefault();
     getSchedule();
+  };
+
+  const handleDownLoadExcel = async () => {
+    const res = await axios({
+      method: "POST",
+      url: "https://schedule-uet.herokuapp.com/export-schedule-excel",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      responseType: "arraybuffer",
+      data: {
+        studentCode: studentInfo?.MaSV,
+      },
+    });
+
+    const url = window.URL.createObjectURL(
+      new Blob([res.data], {
+        type:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      })
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "Schedule.xlsx");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -196,19 +221,31 @@ const App = () => {
       </div>
 
       {studentInfo && (
-        <div className="student">
+        <div
+          style={{ display: "flex", justifyContent: "space-between" }}
+          className="student"
+        >
           <div>
-            <span className="student--name">{studentInfo?.HoVaTen}</span>/
-            <span className="student--id">{studentInfo?.MaSV}</span>
+            <div>
+              <span className="student--name">{studentInfo?.HoVaTen}</span>/
+              <span className="student--id">{studentInfo?.MaSV}</span>
+            </div>
+            <div>
+              Lớp:{" "}
+              <span className="student--class">{studentInfo?.LopKhoaHoc}</span>
+            </div>
+            <div>
+              Ngày sinh:{" "}
+              <span className="student--birthday">{studentInfo?.NgaySinh}</span>
+            </div>
           </div>
-          <div>
-            Lớp:{" "}
-            <span className="student--class">{studentInfo?.LopKhoaHoc}</span>
-          </div>
-          <div>
-            Ngày sinh:{" "}
-            <span className="student--birthday">{studentInfo?.NgaySinh}</span>
-          </div>
+          <button
+            className="form--button"
+            onClick={handleDownLoadExcel}
+            style={{ height: 34, alignSelf: "flex-end" }}
+          >
+            Export Excel
+          </button>
         </div>
       )}
 
