@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 
 import { Response, ClassInfo, StudentInfo } from "./Response";
-import { convertPeriodsFromStringToArray } from "./Helper";
+import { formatClassInfo, generateHtmlTable } from "./Helper";
 
 import "./App.scss";
 
@@ -36,47 +36,15 @@ const App = () => {
           setStudentInfo(null);
           setClasses(null);
         } else {
-          if (json.data) {
-            const firstItem = json.data[0];
-            setStudentInfo({
-              MaSV: firstItem.MaSV,
-              HoVaTen: firstItem.HoVaTen,
-              LopKhoaHoc: firstItem.LopKhoaHoc,
-              NgaySinh: firstItem.NgaySinh,
-            });
-
-            const result = json.data
-              .filter((responseItem) => {
-                return !!responseItem.ThongTinLopHoc;
-              })
-              .map((responseItem) => {
-                const convertItem = responseItem.ThongTinLopHoc.map((item) => {
-                  const ThuAsNumber = Number(item.Thu) ? Number(item.Thu) : 8;
-                  const TietAsArray = convertPeriodsFromStringToArray(
-                    item.Tiet as string
-                  );
-                  return {
-                    ...item,
-                    Thu: ThuAsNumber,
-                    Tiet: TietAsArray,
-                  };
-                });
-                return [...convertItem];
-              })
-              .flat()
-              .sort((classItem1, classItem2) => {
-                //
-                // ORDER BY
-                // Tiet: ASCENDING
-                // Thu: ASCENDING
-                //
-                if (classItem1.Tiet[0] === classItem2.Tiet[0]) {
-                  return classItem1.Thu - classItem2.Thu;
-                }
-                return classItem1.Tiet[0] - classItem2.Tiet[0];
-              });
-            setClasses(result);
-          }
+          const firstItem = json.data[0];
+          setStudentInfo({
+            MaSV: firstItem.MaSV,
+            HoVaTen: firstItem.HoVaTen,
+            LopKhoaHoc: firstItem.LopKhoaHoc,
+            NgaySinh: firstItem.NgaySinh,
+          });
+          const result = formatClassInfo(json.data);
+          setClasses(result);
         }
       })
       .catch((err) => {
@@ -87,60 +55,6 @@ const App = () => {
         setIsFetching(false);
       });
   }, [studentCode]);
-
-  useEffect(() => {
-    // build HTML string from list of classes
-    const defaultRow: string[] = [...Array(8)].map(() => "<td></td>");
-    const table: string[][] = [...Array<string[]>(12)].map((_, rowIndex) => {
-      const newRow: string[] = defaultRow.slice(0);
-      newRow[0] = `<td class="period">${rowIndex + 1}</td>`;
-      return newRow;
-    });
-
-    if (classes) {
-      for (let classIndex = 0; classIndex < classes.length; classIndex++) {
-        const classItem = classes[classIndex];
-        const { MaLopMH, GiangDuong, GiaoVien, TenMonHoc, SoSV } = classItem;
-        const { Thu, Tiet } = classItem as { Thu: number; Tiet: number[] };
-        const firstPeriod = Tiet[0];
-        const lastPeriod = Tiet.slice(0).pop() as number;
-        for (let periodIndex = 0; periodIndex < Tiet.length; periodIndex++) {
-          if (periodIndex === 0) {
-            table[Tiet[periodIndex] - 1][
-              Thu - 1
-            ] = `<td class="subject" rowspan="${lastPeriod - firstPeriod + 1}">
-              <div>
-                <strong>${MaLopMH}</strong>
-                <div class="subject--name">${TenMonHoc}</div>
-                <div class="subject--room">${GiangDuong}</div>
-                <div class="subject--lecturer">${GiaoVien}</div>
-                <div>Số sinh viên: ${SoSV}</div>
-              </div>
-            </td>`;
-          } else {
-            table[Tiet[periodIndex] - 1][Thu - 1] = "";
-          }
-        }
-      }
-
-      let htmlTable: string = "";
-      for (let rowIndex = 0; rowIndex < table.length; rowIndex++) {
-        let htmlRow: string = "";
-        for (
-          let cellIndex = 0;
-          cellIndex < table[rowIndex].length;
-          cellIndex++
-        ) {
-          htmlRow += table[rowIndex][cellIndex];
-        }
-        htmlRow = `<tr>${htmlRow}</tr>`;
-        htmlTable += htmlRow;
-      }
-      setScheduleHTML(htmlTable);
-    } else {
-      setScheduleHTML("");
-    }
-  }, [classes]);
 
   const handleSubmitStudentCode: (
     event: React.FormEvent<HTMLFormElement>
@@ -175,6 +89,10 @@ const App = () => {
     link.click();
     document.body.removeChild(link);
   };
+  useEffect(() => {
+    const htmlTable = generateHtmlTable(classes);
+    setScheduleHTML(htmlTable);
+  }, [classes]);
 
   return (
     <>
