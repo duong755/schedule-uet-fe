@@ -2,18 +2,18 @@ import { useState, useCallback, useEffect } from "react";
 import axios from "axios";
 
 import { Response, ClassInfo, StudentInfo } from "./Response";
-import { formatClassInfo, generateHtmlTable } from "./Helper";
+import { generateHtmlTable } from "./Helper";
 
 import "./App.scss";
 
-const API_URL = "https://schedule-uet.herokuapp.com/get-schedule";
+const API_GET_SCHEDULE = "https://schedule-uet.herokuapp.com/get-schedule";
+const API_EXCEL = "https://schedule-uet.herokuapp.com/export-schedule-excel";
 const month = new Date().getUTCMonth() + 1;
 const year = new Date().getFullYear();
 const semester = month >= 7 ? 1 : 2;
 
 const App = () => {
   const [studentCode, setStudentCode] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
   const [studentInfo, setStudentInfo] = useState<StudentInfo | null>(null);
   const [classes, setClasses] = useState<ClassInfo[] | null>(null);
   const [scheduleHTML, setScheduleHTML] = useState<string>("");
@@ -25,26 +25,18 @@ const App = () => {
   };
 
   const getSchedule = useCallback<() => void>(() => {
-    setIsFetching(true);
     axios
-      .post(API_URL, {
+      .post(API_GET_SCHEDULE, {
         studentCode: studentCode,
       })
       .then((res) => {
         const json = res.data as Response;
-        if (!json.data.length) {
+        if (!json.data) {
           setStudentInfo(null);
           setClasses(null);
         } else {
-          const firstItem = json.data[0];
-          setStudentInfo({
-            MaSV: firstItem.MaSV,
-            HoVaTen: firstItem.HoVaTen,
-            LopKhoaHoc: firstItem.LopKhoaHoc,
-            NgaySinh: firstItem.NgaySinh,
-          });
-          const result = formatClassInfo(json.data);
-          setClasses(result);
+          setStudentInfo(json.data.studentInfo);
+          setClasses(json.data.classes);
         }
       })
       .catch((err) => {
@@ -52,7 +44,6 @@ const App = () => {
       })
       .finally(() => {
         setStudentCode("");
-        setIsFetching(false);
       });
   }, [studentCode]);
 
@@ -63,10 +54,10 @@ const App = () => {
     getSchedule();
   };
 
-  const handleDownLoadExcel = async () => {
+  const handleDownloadExcel = async () => {
     const res = await axios({
       method: "POST",
-      url: "https://schedule-uet.herokuapp.com/export-schedule-excel",
+      url: API_EXCEL,
       headers: {
         "Content-Type": "application/json",
       },
@@ -89,6 +80,25 @@ const App = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  useEffect(() => {
+    axios.interceptors.request.use(
+      (config) => {
+        const overlay = document.querySelector(".overlay") as HTMLDivElement;
+        overlay.style.display = "flex";
+        return config;
+      },
+      (error) => {
+        throw error;
+      }
+    );
+    axios.interceptors.response.use((value) => {
+      const overlay = document.querySelector(".overlay") as HTMLDivElement;
+      overlay.style.display = "none";
+      return value;
+    });
+  }, []);
+
   useEffect(() => {
     const htmlTable = generateHtmlTable(classes);
     setScheduleHTML(htmlTable);
@@ -126,23 +136,14 @@ const App = () => {
             value={studentCode}
             onChange={handleChangeStudentCode}
           />
-          <button className="form--button" onClick={getSchedule}>
+          <button className="btn btn-default form--button" onClick={getSchedule}>
             Lấy thời khóa biểu
           </button>
         </form>
       </div>
-      <div
-        className="fetching"
-        style={{ display: isFetching ? "block" : "none" }}
-      >
-        Loading...
-      </div>
 
       {studentInfo && (
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-          className="student"
-        >
+        <div className="student">
           <div>
             <div>
               <span className="student--name">{studentInfo?.HoVaTen}</span>/
@@ -157,11 +158,7 @@ const App = () => {
               <span className="student--birthday">{studentInfo?.NgaySinh}</span>
             </div>
           </div>
-          <button
-            className="form--button"
-            onClick={handleDownLoadExcel}
-            style={{ height: 34, alignSelf: "flex-end" }}
-          >
+          <button className="btn btn-excel student--excel" onClick={handleDownloadExcel}>
             Export Excel
           </button>
         </div>

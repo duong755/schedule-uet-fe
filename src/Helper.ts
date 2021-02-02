@@ -1,4 +1,4 @@
-import { ClassInfo, ResponseItem } from "./Response";
+import { ClassInfo } from "./Response";
 
 export function convertPeriodsFromStringToArray(str: string): number[] {
   const PERIOD_REGEX = new RegExp("^(\\d{1,2})-(\\d{1,2})$");
@@ -20,37 +20,6 @@ export function convertPeriodsFromStringToArray(str: string): number[] {
     return periods;
   }
   return [];
-}
-
-export function formatClassInfo(
-  responseData: ResponseItem[]
-): ClassInfo[] | null {
-  const mapResult = responseData
-    .filter((responseItem) => {
-      return !!responseItem.ThongTinLopHoc;
-    })
-    .map((responseItem) => {
-      const convertItem = responseItem.ThongTinLopHoc.map((item) => {
-        const ThuAsNumber = Number(item.Thu) ? Number(item.Thu) : 8;
-        const TietAsArray = convertPeriodsFromStringToArray(
-          item.Tiet as string
-        );
-        return {
-          ...item,
-          Thu: ThuAsNumber,
-          Tiet: TietAsArray,
-        };
-      });
-      return [...convertItem];
-    });
-  const flatResult = mapResult.flat();
-  const sortResult = flatResult.sort((classItem1, classItem2) => {
-    if (classItem1.Tiet[0] === classItem2.Tiet[0]) {
-      return classItem1.Thu - classItem2.Thu;
-    }
-    return classItem1.Tiet[0] - classItem2.Tiet[0];
-  });
-  return sortResult;
 }
 
 export function generateHtmlTable(classes: ClassInfo[] | null): string {

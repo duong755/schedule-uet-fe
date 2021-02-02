@@ -1,3 +1,37 @@
+.btn {
+    color: #ffffff;
+    border: 0;
+    cursor: pointer;
+    &:focus {
+        outline: 0;
+    }
+}
+
+.btn-default {
+    background-color: #0099ff;
+}
+
+.btn-excel {
+    background-color: #1D6F42;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    z-index: 100000;
+    position: fixed;
+    display: none;
+    .loading {
+        font-size: 200%;
+    }
+}
+
 .header {
     display: flex;
     flex-direction: row;
@@ -27,19 +61,17 @@ form {
 
 .form--button {
     margin-left: 10px;
-    border-radius: 0;
-    border: 0;
-    background-color: #0099ff;
-    color: #ffffff;
-    cursor: pointer;
-    &:focus {
-        outline: 0;
-    }
 }
 
 .student {
     padding-top: 10px;
     padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    .student--excel {
+        height: 34px;
+        align-self: center;
+    }
 }
 
 .classes {

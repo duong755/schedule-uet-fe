@@ -1,14 +1,14 @@
 export type ClassInfo = {
-  Buoi: string;
-  GiangDuong: string;
-  GiaoVien: string;
-  MaLopMH: string;
-  TenMonHoc: string;
-  SoSV: number | string;
-  Thu: number | string;
-  Tiet: string | number[];
   _id: string;
-  id: string;
+  TenMonHoc: string;
+  MaLopMH: string;
+  GiaoVien: string;
+  SoSV: string;
+  Buoi: string;
+  Thu: number;
+  Tiet: number[];
+  GiangDuong: string;
+  GhiChu: string;
 };
 
 export type StudentInfo = {
@@ -18,21 +18,10 @@ export type StudentInfo = {
   NgaySinh: string;
 };
 
-export type ResponseItem = {
-  GhiChu: string;
-  HoVaTen: string;
-  LopKhoaHoc: string;
-  MaLMH: string;
-  MaSV: string;
-  NgaySinh: string;
-  SoTinChi: number | string;
-  TenMonHoc: string;
-  _id: string;
-  id: string;
-  ThongTinLopHoc: ClassInfo[];
-};
-
 export type Response = {
   message: string;
-  data: ResponseItem[]
+  data: {
+    studentInfo: StudentInfo;
+    classes: ClassInfo[]
+  };
 };
