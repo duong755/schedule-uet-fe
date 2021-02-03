@@ -1,28 +1,6 @@
 import { ClassInfo } from "./Response";
 
-export function convertPeriodsFromStringToArray(str: string): number[] {
-  const PERIOD_REGEX = new RegExp("^(\\d{1,2})-(\\d{1,2})$");
-  if (PERIOD_REGEX.test(str)) {
-    str.match(PERIOD_REGEX);
-    const first = Number(RegExp.$1);
-    const last = Number(RegExp.$2);
-    if (first === last) {
-      return [first];
-    }
-    const periods: number[] = [];
-    for (
-      let i = first;
-      i <= last;
-      i += (last - first) / Math.abs(last - first)
-    ) {
-      periods.push(i);
-    }
-    return periods;
-  }
-  return [];
-}
-
-export function generateHtmlTable(classes: ClassInfo[] | null): string {
+export function generateHtmlTable(classes: ClassInfo[] | null | undefined): string {
   const defaultRow: string[] = [...Array(8)].map(() => "<td></td>");
   const table: string[][] = [...Array<string[]>(14)].map((_, rowIndex) => {
     const newRow: string[] = defaultRow.slice(0);
@@ -33,7 +11,7 @@ export function generateHtmlTable(classes: ClassInfo[] | null): string {
   if (classes) {
     for (let classIndex = 0; classIndex < classes.length; classIndex++) {
       const classItem = classes[classIndex];
-      const { MaLopMH, GiangDuong, GiaoVien, TenMonHoc, SoSV } = classItem;
+      const { MaLopMH, GiangDuong, GiaoVien, TenMonHoc, SoSV, GhiChu } = classItem;
       const { Thu, Tiet } = classItem as { Thu: number; Tiet: number[] };
       const firstPeriod = Tiet[0];
       const lastPeriod = Tiet.slice(0).pop() as number;
@@ -43,7 +21,7 @@ export function generateHtmlTable(classes: ClassInfo[] | null): string {
             Thu - 1
           ] = `<td class="subject" rowspan="${lastPeriod - firstPeriod + 1}">
               <div>
-                <strong>${MaLopMH}</strong>
+                <strong>${MaLopMH} (${GhiChu})</strong>
                 <div class="subject--name">${TenMonHoc}</div>
                 <div class="subject--room">${GiangDuong}</div>
                 <div class="subject--lecturer">${GiaoVien}</div>

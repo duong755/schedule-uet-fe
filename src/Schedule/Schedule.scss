@@ -32,20 +32,6 @@
     }
 }
 
-.header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    .header--credit {
-        text-align: right;
-        a {
-            color: #0099ff;
-            text-decoration: none;
-        }
-    }
-}
-
 form {
     padding-top: 10px;
     padding-bottom: 10px;
