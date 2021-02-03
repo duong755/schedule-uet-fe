@@ -6,6 +6,8 @@ import "./index.scss";
 import { Header } from "./Header/Header";
 import { Schedule } from "./Schedule/Schedule";
 import { ScheduleProvider } from "./context/ScheduleContext";
+import { ClassMembers } from "./ClassMembers/ClassMembers";
+import { Exam } from "./Exam/Exam";
 
 import reportWebVitals from "./reportWebVitals";
 import { NOT_IMPLEMENTED } from "./constants";
@@ -39,10 +41,10 @@ ReactDOM.render(
             <Schedule />
           </Route>
           <Route path="/classmembers">
-            <div className="not-implemented">{NOT_IMPLEMENTED}</div>
+            <ClassMembers />
           </Route>
           <Route path="/exam">
-            <div className="not-implemented">{NOT_IMPLEMENTED}</div>
+            <Exam />
           </Route>
         </Switch>
       </BrowserRouter>

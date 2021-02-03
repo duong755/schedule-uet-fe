@@ -1,6 +1,12 @@
 import { ClassInfo } from "./Response";
 
-export function generateHtmlTable(classes: ClassInfo[] | null | undefined): string {
+export function setPageTitle(title: string): void {
+  document.title = title;
+}
+
+export function generateHtmlTable(
+  classes: ClassInfo[] | null | undefined
+): string {
   const defaultRow: string[] = [...Array(8)].map(() => "<td></td>");
   const table: string[][] = [...Array<string[]>(14)].map((_, rowIndex) => {
     const newRow: string[] = defaultRow.slice(0);
@@ -11,7 +17,14 @@ export function generateHtmlTable(classes: ClassInfo[] | null | undefined): stri
   if (classes) {
     for (let classIndex = 0; classIndex < classes.length; classIndex++) {
       const classItem = classes[classIndex];
-      const { MaLopMH, GiangDuong, GiaoVien, TenMonHoc, SoSV, GhiChu } = classItem;
+      const {
+        MaLopMH,
+        GiangDuong,
+        GiaoVien,
+        TenMonHoc,
+        SoSV,
+        GhiChu,
+      } = classItem;
       const { Thu, Tiet } = classItem as { Thu: number; Tiet: number[] };
       const firstPeriod = Tiet[0];
       const lastPeriod = Tiet.slice(0).pop() as number;

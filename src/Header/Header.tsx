@@ -9,7 +9,7 @@ const Header: React.FC = () => {
     <div className="header">
       <div className="header--title">
         <h3>
-          Thời khóa biểu UET, học kì {semester}, năm học{" "}
+          UET, học kì {semester}, năm học{" "}
           {semester === 1 ? year : year - 1}-{semester === 1 ? year + 1 : year}
         </h3>
       </div>

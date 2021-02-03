@@ -2,11 +2,20 @@ import { useState, useCallback, useEffect, useContext } from "react";
 import axios from "axios";
 
 import { Response } from "../Response";
-import { generateHtmlTable } from "../Helper";
+import { generateHtmlTable, setPageTitle } from "../Helper";
 import { API_GET_SCHEDULE, API_EXCEL } from "../constants";
 
 import "./Schedule.scss";
 import { ScheduleContext, ScheduleContextData } from "../context/ScheduleContext";
+
+const displayOverlay: (show: boolean) => void = (show) => {
+  const overlay = document.querySelector(".overlay") as HTMLDivElement;
+  if (show) {
+    overlay.style.display = "flex";
+  } else {
+    overlay.style.display = "none";
+  }
+};
 
 const Schedule: React.FC = () => {
   const scheduleContext = useContext<ScheduleContextData | null | undefined>(ScheduleContext);
@@ -40,6 +49,7 @@ const Schedule: React.FC = () => {
         scheduleContext?.setClassesInfo(json.data.classes);
       }
     } catch(err) {
+      displayOverlay(false);
       console.error(err);
     } finally {
       setStudentCode("");
@@ -81,10 +91,10 @@ const Schedule: React.FC = () => {
   };
 
   useEffect(() => {
+    setPageTitle("Thời khóa biểu");
     axios.interceptors.request.use(
       (config) => {
-        const overlay = document.querySelector(".overlay") as HTMLDivElement;
-        overlay.style.display = "flex";
+        displayOverlay(true);
         return config;
       },
       (error) => {
@@ -92,8 +102,7 @@ const Schedule: React.FC = () => {
       }
     );
     axios.interceptors.response.use((value) => {
-      const overlay = document.querySelector(".overlay") as HTMLDivElement;
-      overlay.style.display = "none";
+      displayOverlay(false);
       return value;
     });
   }, []);
