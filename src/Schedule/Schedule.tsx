@@ -60,7 +60,12 @@ const Schedule: React.FC = () => {
     event: React.FormEvent<HTMLFormElement>
   ) => void = (event) => {
     event.preventDefault();
-    getSchedule();
+    if (!/^\s*\d{8}\s*$/.test(studentCode)) {
+      alert("Nhập mã sinh viên đúng định dạng vào bạn ơi !!!");
+    } else {
+      setStudentCode(studentCode.trim());
+      getSchedule();
+    }
   };
 
   const handleDownloadExcel = async () => {
@@ -103,6 +108,9 @@ const Schedule: React.FC = () => {
     );
     axios.interceptors.response.use((value) => {
       displayOverlay(false);
+      if (value.status === 400) {
+        alert(value.data.message);
+      }
       return value;
     });
   }, []);
