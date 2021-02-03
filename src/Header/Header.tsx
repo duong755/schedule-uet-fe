@@ -13,6 +13,11 @@ const Header: React.FC = () => {
           {semester === 1 ? year : year - 1}-{semester === 1 ? year + 1 : year}
         </h3>
       </div>
+      <div className="header--github-repo">
+        <a href="https://github.com/duong755/schedule-uet-fe/issues">
+          Góp ý
+        </a>
+      </div>
       <div className="header--credit">
         <div>
           <a href="https://www.facebook.com/nguyenxuanhoang30799">
