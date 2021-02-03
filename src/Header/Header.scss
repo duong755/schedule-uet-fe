@@ -8,6 +8,7 @@
         align-items: initial;
     }
     .header--credit {
+        display: none;
         text-align: right;
         @media (max-width: 768px) {
             text-align: left;
