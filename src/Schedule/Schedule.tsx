@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useContext } from "react";
+import { useState, useCallback, useEffect, useContext, useLayoutEffect } from "react";
 import axios from "axios";
 
 import { Response } from "../Response";
@@ -114,6 +114,26 @@ const Schedule: React.FC = () => {
       return value;
     });
   }, []);
+
+  useLayoutEffect(() => {
+    Array.from(document.querySelectorAll("td.subject") as NodeListOf<HTMLTableCellElement>)
+      .forEach((subject) => {
+        subject.onmouseenter = () => {
+          const subjectId = subject.dataset.subjectId as string;
+          Array.from(document.querySelectorAll(`td[data-subject-id="${subjectId}"]`))
+            .forEach((matchSubject) => {
+              matchSubject.classList.add("focus");
+            });
+        };
+        subject.onmouseleave = () => {
+          const subjectId = subject.dataset.subjectId as string;
+          Array.from(document.querySelectorAll(`td[data-subject-id="${subjectId}"]`))
+            .forEach((matchSubject) => {
+              matchSubject.classList.remove("focus");
+            });
+        };
+      })
+  }, [scheduleHTML]);
 
   useEffect(() => {
     const htmlTable = generateHtmlTable(scheduleContext?.classesInfo);

@@ -87,7 +87,8 @@ form {
                     border: 1px solid #000000;
                     padding: 10px 10px;
                     &.period {
-                        text-align:center;
+                        width: 200px;
+                        text-align: center;
                     }
                 }
                 td.subject {
@@ -97,6 +98,10 @@ form {
                     .subject--lecturer {
                         font-style: italic;
                     }
+                }
+                td.subject.focus {
+                    background-color: #0099ff;
+                    color: #ffffff;
                 }
                 td.subject:hover {
                     background-color: #0099ff;

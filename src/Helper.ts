@@ -1,4 +1,5 @@
 import { ClassInfo } from "./Response";
+import { PERIODS } from "./constants";
 
 export function setPageTitle(title: string): void {
   document.title = title;
@@ -10,7 +11,7 @@ export function generateHtmlTable(
   const defaultRow: string[] = [...Array(8)].map(() => "<td></td>");
   const table: string[][] = [...Array<string[]>(14)].map((_, rowIndex) => {
     const newRow: string[] = defaultRow.slice(0);
-    newRow[0] = `<td class="period">${rowIndex + 1}</td>`;
+    newRow[0] = `<td class="period">${PERIODS[rowIndex]}</td>`;
     return newRow;
   });
 
@@ -32,7 +33,7 @@ export function generateHtmlTable(
         if (periodIndex === 0) {
           table[Tiet[periodIndex] - 1][
             Thu - 1
-          ] = `<td class="subject" rowspan="${lastPeriod - firstPeriod + 1}">
+          ] = `<td class="subject" data-subject-id="${MaLopMH}" rowspan="${lastPeriod - firstPeriod + 1}">
               <div>
                 <strong>${MaLopMH} (${GhiChu})</strong>
                 <div class="subject--name">${TenMonHoc}</div>
