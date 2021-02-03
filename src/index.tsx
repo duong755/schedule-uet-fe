@@ -10,7 +10,6 @@ import { ClassMembers } from "./ClassMembers/ClassMembers";
 import { Exam } from "./Exam/Exam";
 
 import reportWebVitals from "./reportWebVitals";
-import { NOT_IMPLEMENTED } from "./constants";
 
 ReactDOM.render(
   <React.StrictMode>

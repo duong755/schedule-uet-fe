@@ -15,7 +15,7 @@ const Header: React.FC = () => {
       </div>
       <div className="header--credit">
         <div>
-          <a href="https://github.com/hoangnx30/schedule-uet">
+          <a href="https://www.facebook.com/nguyenxuanhoang30799">
             Nguyễn Xuân Hoàng
           </a>
         </div>
