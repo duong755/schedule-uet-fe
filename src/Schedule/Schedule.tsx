@@ -152,8 +152,8 @@ const Schedule: React.FC = () => {
             onChange={handleChangeStudentCode}
           />
           <button
+            type="submit"
             className="btn btn-default form--button"
-            onClick={getSchedule}
           >
             Lấy thời khóa biểu
           </button>
