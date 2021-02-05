@@ -1,23 +1,15 @@
-import { useState, useCallback, useEffect, useContext, useLayoutEffect } from "react";
+import { useState, useCallback, useEffect, useContext, useLayoutEffect, useRef } from "react";
 import axios from "axios";
 
 import { Response } from "../Response";
-import { generateHtmlTable, setPageTitle } from "../Helper";
+import { generateHtmlTable, setPageTitle, displayOverlay } from "../Helper";
 import { API_GET_SCHEDULE, API_EXCEL } from "../constants";
 
 import "./Schedule.scss";
 import { ScheduleContext, ScheduleContextData } from "../context/ScheduleContext";
 
-const displayOverlay: (show: boolean) => void = (show) => {
-  const overlay = document.querySelector(".overlay") as HTMLDivElement;
-  if (show) {
-    overlay.style.display = "flex";
-  } else {
-    overlay.style.display = "none";
-  }
-};
-
 const Schedule: React.FC = () => {
+  const studentCodeInput = useRef<HTMLInputElement>(null);
   const scheduleContext = useContext<ScheduleContextData | null | undefined>(ScheduleContext);
   const [studentCode, setStudentCode] = useState("");
   const [scheduleHTML, setScheduleHTML] = useState<string>("");
@@ -96,6 +88,7 @@ const Schedule: React.FC = () => {
   };
 
   useEffect(() => {
+    studentCodeInput.current?.focus();
     setPageTitle("Thời khóa biểu");
     axios.interceptors.request.use(
       (config) => {
@@ -116,18 +109,18 @@ const Schedule: React.FC = () => {
   }, []);
 
   useLayoutEffect(() => {
-    Array.from(document.querySelectorAll("td.subject") as NodeListOf<HTMLTableCellElement>)
+    (document.querySelectorAll("td.subject") as NodeListOf<HTMLTableCellElement>)
       .forEach((subject) => {
         subject.onmouseenter = () => {
           const subjectId = subject.dataset.subjectId as string;
-          Array.from(document.querySelectorAll(`td[data-subject-id="${subjectId}"]`))
+          document.querySelectorAll(`td[data-subject-id="${subjectId}"]`)
             .forEach((matchSubject) => {
               matchSubject.classList.add("focus");
             });
         };
         subject.onmouseleave = () => {
           const subjectId = subject.dataset.subjectId as string;
-          Array.from(document.querySelectorAll(`td[data-subject-id="${subjectId}"]`))
+          document.querySelectorAll(`td[data-subject-id="${subjectId}"]`)
             .forEach((matchSubject) => {
               matchSubject.classList.remove("focus");
             });
@@ -145,6 +138,7 @@ const Schedule: React.FC = () => {
       <div>
         <form onSubmit={handleSubmitStudentCode}>
           <input
+            ref={studentCodeInput}
             type="text"
             placeholder="Nhập mã số sinh viên"
             className="form--input"

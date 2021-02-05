@@ -11,6 +11,25 @@ import { Exam } from "./Exam/Exam";
 
 import reportWebVitals from "./reportWebVitals";
 
+const links = [
+  {
+    path: "/",
+    exact: true,
+    name: "Thời khóa biểu",
+    component: <Schedule />
+  },
+  {
+    path: "/classmembers",
+    name: "Danh sách lớp",
+    component: <ClassMembers />
+  },
+  {
+    path: "/exam",
+    name: "Lịch thi",
+    component: <Exam />
+  }
+];
+
 ReactDOM.render(
   <React.StrictMode>
     <Header />
@@ -18,33 +37,25 @@ ReactDOM.render(
       <BrowserRouter>
         <nav>
           <ul>
-            <li>
-              <NavLink exact={true} to="/" activeClassName="active-route">
-                Thời khóa biểu
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/classmembers" activeClassName="active-route">
-                Danh sách lớp
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/exam" activeClassName="active-route">
-                Lịch thi
-              </NavLink>
-            </li>
+            {links.map((link) => {
+              return (
+                <li key={link.path}>
+                  <NavLink exact={link.exact} to={link.path} activeClassName="active-route">
+                    {link.name}
+                  </NavLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
         <Switch>
-          <Route exact path="/">
-            <Schedule />
-          </Route>
-          <Route path="/classmembers">
-            <ClassMembers />
-          </Route>
-          <Route path="/exam">
-            <Exam />
-          </Route>
+          {links.map((link) => {
+            return (
+              <Route key={link.path} exact={link.exact} path={link.path}>
+                {link.component}
+              </Route>
+            );
+          })}
         </Switch>
       </BrowserRouter>
     </ScheduleProvider>
