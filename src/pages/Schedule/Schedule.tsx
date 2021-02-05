@@ -1,12 +1,14 @@
 import { useState, useCallback, useEffect, useContext, useLayoutEffect, useRef } from "react";
-import axios from "axios";
 
-import { Response } from "../Response";
-import { generateHtmlTable, setPageTitle, displayOverlay } from "../Helper";
-import { API_GET_SCHEDULE, API_EXCEL } from "../constants";
+import { ScheduleResponse } from "../../types/ScheduleResponse";
+import { setPageTitle, displayOverlay } from "../../common/helpers";
+import { axiosCommonInstance } from "../../common/axios";
+
+import { generateHtmlTable } from "./Schedule.utils";
+
 
 import "./Schedule.scss";
-import { ScheduleContext, ScheduleContextData } from "../context/ScheduleContext";
+import { ScheduleContext, ScheduleContextData } from "../../context/ScheduleContext";
 
 const Schedule: React.FC = () => {
   const studentCodeInput = useRef<HTMLInputElement>(null);
@@ -22,8 +24,8 @@ const Schedule: React.FC = () => {
 
   const getSchedule = useCallback<() => Promise<void>>(async () => {
     try {
-      const res = await axios({
-        url: API_GET_SCHEDULE,
+      const res = await axiosCommonInstance({
+        url: "/get-schedule",
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -32,7 +34,7 @@ const Schedule: React.FC = () => {
           studentCode: studentCode
         }
       });
-      const json = res.data as Response;
+      const json = res.data as ScheduleResponse.Response;
       if (!json.data) {
         scheduleContext?.setStudentInfo(null);
         scheduleContext?.setClassesInfo(null);
@@ -61,9 +63,9 @@ const Schedule: React.FC = () => {
   };
 
   const handleDownloadExcel = async () => {
-    const res = await axios({
+    const res = await axiosCommonInstance({
       method: "POST",
-      url: API_EXCEL,
+      url: "/export-schedule-excel",
       headers: {
         "Content-Type": "application/json",
       },
@@ -90,22 +92,6 @@ const Schedule: React.FC = () => {
   useEffect(() => {
     studentCodeInput.current?.focus();
     setPageTitle("Thời khóa biểu");
-    axios.interceptors.request.use(
-      (config) => {
-        displayOverlay(true);
-        return config;
-      },
-      (error) => {
-        throw error;
-      }
-    );
-    axios.interceptors.response.use((value) => {
-      displayOverlay(false);
-      if (value.status === 400) {
-        alert(value.data.message);
-      }
-      return value;
-    });
   }, []);
 
   useLayoutEffect(() => {

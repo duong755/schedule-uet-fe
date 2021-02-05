@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { NOT_IMPLEMENTED } from "../constants";
-import { setPageTitle } from "../Helper";
+import { NOT_IMPLEMENTED } from "../../constants";
+import { setPageTitle } from "../../common/helpers";
 
 export const ClassMembers: React.FC<{}> = () => {
   useEffect(() => {

@@ -1,21 +1,8 @@
-import { ClassInfo } from "./Response";
-import { PERIODS } from "./constants";
-
-export function setPageTitle(title: string): void {
-  document.title = title;
-}
-
-export function displayOverlay(show: boolean) {
-  const overlay = document.querySelector(".overlay") as HTMLDivElement;
-  if (show) {
-    overlay.style.display = "flex";
-  } else {
-    overlay.style.display = "none";
-  }
-}
+import { ScheduleResponse } from "../../types/ScheduleResponse";
+import { PERIODS } from "../../constants";
 
 export function generateHtmlTable(
-  classes: ClassInfo[] | null | undefined
+  classes: ScheduleResponse.ClassInfo[] | null | undefined
 ): string {
   const defaultRow: string[] = [...Array(8)].map(() => "<td></td>");
   const table: string[][] = [...Array<string[]>(14)].map((_, rowIndex) => {

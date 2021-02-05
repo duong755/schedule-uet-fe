@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import { NavLink, Route, BrowserRouter, Switch } from "react-router-dom";
 import "./index.scss";
 
-import { Header } from "./Header/Header";
-import { Schedule } from "./Schedule/Schedule";
+import { Header } from "./common/components/Header/Header";
+import { Schedule } from "./pages/Schedule/Schedule";
 import { ScheduleProvider } from "./context/ScheduleContext";
-import { ClassMembers } from "./ClassMembers/ClassMembers";
-import { Exam } from "./Exam/Exam";
+import { ClassMembers } from "./pages/ClassMembers/ClassMembers";
+import { Exam } from "./pages/Exam/Exam";
 
 import reportWebVitals from "./reportWebVitals";
 
