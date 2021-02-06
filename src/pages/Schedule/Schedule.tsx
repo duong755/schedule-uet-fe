@@ -1,10 +1,10 @@
-import { useState, useCallback, useEffect, useContext, useLayoutEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useContext, useRef } from "react";
 
 import { ScheduleResponse } from "../../types/ScheduleResponse";
 import { setPageTitle, displayOverlay } from "../../common/helpers";
 import { axiosCommonInstance } from "../../common/axios";
 
-import { generateHtmlTable } from "./Schedule.utils";
+import { generateTableBody } from "./Schedule.utils";
 
 
 import "./Schedule.scss";
@@ -14,7 +14,6 @@ const Schedule: React.FC = () => {
   const studentCodeInput = useRef<HTMLInputElement>(null);
   const scheduleContext = useContext<ScheduleContextData | null | undefined>(ScheduleContext);
   const [studentCode, setStudentCode] = useState("");
-  const [scheduleHTML, setScheduleHTML] = useState<string>("");
 
   const handleChangeStudentCode: (
     event: React.ChangeEvent<HTMLInputElement>
@@ -94,31 +93,6 @@ const Schedule: React.FC = () => {
     setPageTitle("Thời khóa biểu");
   }, []);
 
-  useLayoutEffect(() => {
-    (document.querySelectorAll("td.subject") as NodeListOf<HTMLTableCellElement>)
-      .forEach((subject) => {
-        subject.onmouseenter = () => {
-          const subjectId = subject.dataset.subjectId as string;
-          document.querySelectorAll(`td[data-subject-id="${subjectId}"]`)
-            .forEach((matchSubject) => {
-              matchSubject.classList.add("focus");
-            });
-        };
-        subject.onmouseleave = () => {
-          const subjectId = subject.dataset.subjectId as string;
-          document.querySelectorAll(`td[data-subject-id="${subjectId}"]`)
-            .forEach((matchSubject) => {
-              matchSubject.classList.remove("focus");
-            });
-        };
-      })
-  }, [scheduleHTML]);
-
-  useEffect(() => {
-    const htmlTable = generateHtmlTable(scheduleContext?.classesInfo);
-    setScheduleHTML(htmlTable);
-  }, [scheduleContext?.classesInfo]);
-
   return (
     <>
       <form onSubmit={handleSubmitStudentCode}>
@@ -178,7 +152,9 @@ const Schedule: React.FC = () => {
                 <th>CN</th>
               </tr>
             </thead>
-            <tbody dangerouslySetInnerHTML={{ __html: scheduleHTML }}></tbody>
+            <tbody>
+              {generateTableBody(scheduleContext?.classesInfo)}
+            </tbody>
           </table>
         </div>
       )}
