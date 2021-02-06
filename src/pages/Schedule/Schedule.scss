@@ -1,120 +1,65 @@
-.btn {
-    color: #ffffff;
-    border: 0;
-    cursor: pointer;
-    &:focus {
-        outline: 0;
-    }
-}
-
-.btn-default {
-    background-color: #0099ff;
-}
-
-.btn-excel {
-    background-color: #1D6F42;
-}
-
-.overlay {
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    left: 0;
-    z-index: 100000;
-    position: fixed;
-    display: none;
-    .loading {
-        font-size: 200%;
-    }
-}
-
-form {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 100%;
-    display: flex;
-    .form--input {
-        padding-left: 5px;
-        padding-right: 5px;
-        height: 34px;
-        flex: 1;
-        border-radius: 0;
-        border: 1px solid #333333;
-        &:focus {
-            border: 1px solid #0066ff;
-            outline: 2px solid #0066ff;
-            box-shadow: 0 0 10px #0066ff;
-        }
-    }
-}
-
-.form--button {
-    margin-left: 10px;
-}
-
 .student {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    .student--excel {
-        height: 34px;
-        align-self: center;
-    }
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  .student--excel {
+    height: 34px;
+      align-self: center;
+  }
 }
 
 .classes {
-    table {
-        box-sizing: border-box;
-        border: 1px solid #000000;
-        border-collapse: collapse;
-        thead {
-            tr {
-                border-collapse: collapse;
-                th {
-                    border: 1px solid #000000;
-                    padding: 10px 10px;
-                    &:nth-child(1) {
-                        width: 20px;
-                    }
-                    &:nth-child(n+2) {
-                        width: 200px;
-                    }
-                }
-            }
-        }
-        tbody {
-            tr {
-                border-collapse: collapse;
-                td {
-                    border: 1px solid #000000;
-                    padding: 10px 10px;
-                    &.period {
-                        width: 200px;
-                        text-align: center;
-                    }
-                }
-                td.subject {
-                    .subject--name {
-                        text-decoration: underline;
-                    }
-                    .subject--lecturer {
-                        font-style: italic;
-                    }
-                }
-                td.subject.focus {
-                    background-color: #0099ff;
-                    color: #ffffff;
-                }
-                td.subject:hover {
-                    background-color: #0099ff;
-                    color: #ffffff;
-                }
-            }
-        }
+  table {
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border-collapse: collapse;
+    tr,
+    th,
+    td {
+      border: 1px solid #000000;
     }
+    th,
+    td {
+      padding: 10px;
+    }
+    thead {
+      tr {
+        th {
+          &:nth-child(1) {
+            width: 20px;
+          }
+          &:nth-child(n+2) {
+            width: 200px;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          &.period {
+            width: 200px;
+            text-align: center;
+          }
+        }
+        td.subject {
+          .subject--name {
+            text-decoration: underline;
+          }
+          .subject--lecturer {
+            font-style: italic;
+          }
+        }
+        td.subject.focus {
+          background-color: #0099ff;
+          color: #ffffff;
+        }
+        td.subject:hover {
+          background-color: #0099ff;
+          color: #ffffff;
+        }
+      }
+    }
+  }
 }

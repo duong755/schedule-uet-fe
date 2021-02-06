@@ -121,24 +121,22 @@ const Schedule: React.FC = () => {
 
   return (
     <>
-      <div>
-        <form onSubmit={handleSubmitStudentCode}>
-          <input
-            ref={studentCodeInput}
-            type="text"
-            placeholder="Nhập mã số sinh viên"
-            className="form--input"
-            value={studentCode}
-            onChange={handleChangeStudentCode}
-          />
-          <button
-            type="submit"
-            className="btn btn-default form--button"
-          >
-            Lấy thời khóa biểu
-          </button>
-        </form>
-      </div>
+      <form onSubmit={handleSubmitStudentCode}>
+        <input
+          ref={studentCodeInput}
+          type="text"
+          placeholder="Nhập mã số sinh viên"
+          className="form--input"
+          value={studentCode}
+          onChange={handleChangeStudentCode}
+        />
+        <button
+          type="submit"
+          className="btn btn-default form--button"
+        >
+          Lấy thời khóa biểu
+        </button>
+      </form>
 
       {scheduleContext?.studentInfo && (
         <div className="student">

@@ -16,7 +16,7 @@ axiosCommonInstance.interceptors.request.use(overlayInterceptor);
 axiosCommonInstance.interceptors.response.use(
   (value) => {
     displayOverlay(false);
-    return value; 
+    return value;
   },
   (error) => {
     displayOverlay(false);

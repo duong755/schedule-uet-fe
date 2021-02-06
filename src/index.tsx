@@ -2,38 +2,39 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { NavLink, Route, BrowserRouter, Switch } from "react-router-dom";
 import "./index.scss";
+import reportWebVitals from "./reportWebVitals";
 
 import { Header } from "./common/components/Header/Header";
+
 import { Schedule } from "./pages/Schedule/Schedule";
-import { ScheduleProvider } from "./context/ScheduleContext";
 import { ClassMembers } from "./pages/ClassMembers/ClassMembers";
 import { Exam } from "./pages/Exam/Exam";
 
-import reportWebVitals from "./reportWebVitals";
+import { CombinedProvider } from "./context/CombinedProvider";
 
 const links = [
   {
     path: "/",
     exact: true,
     name: "Thời khóa biểu",
-    component: <Schedule />
+    child: <Schedule />
   },
   {
     path: "/classmembers",
     name: "Danh sách lớp",
-    component: <ClassMembers />
+    child: <ClassMembers />
   },
   {
     path: "/exam",
     name: "Lịch thi",
-    component: <Exam />
+    child: <Exam />
   }
 ];
 
 ReactDOM.render(
   <React.StrictMode>
     <Header />
-    <ScheduleProvider>
+    <CombinedProvider>
       <BrowserRouter>
         <nav>
           <ul>
@@ -52,13 +53,13 @@ ReactDOM.render(
           {links.map((link) => {
             return (
               <Route key={link.path} exact={link.exact} path={link.path}>
-                {link.component}
+                {link.child}
               </Route>
             );
           })}
         </Switch>
       </BrowserRouter>
-    </ScheduleProvider>
+    </CombinedProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

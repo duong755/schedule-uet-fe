@@ -12,6 +12,7 @@ export namespace ClassMembersResponse {
     HoVaTen: string;
     NgaySinh: string;
     LopKhoaHoc: string;
+    GhiChu: string;
   };
 
   export type Response = {
