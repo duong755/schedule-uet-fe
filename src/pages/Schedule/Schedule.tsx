@@ -24,7 +24,7 @@ const Schedule: React.FC = () => {
   const getSchedule = useCallback<() => Promise<void>>(async () => {
     try {
       const res = await axiosCommonInstance({
-        url: "/get-schedule",
+        url: "api/v1/get-schedule",
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -64,7 +64,7 @@ const Schedule: React.FC = () => {
   const handleDownloadExcel = async () => {
     const res = await axiosCommonInstance({
       method: "POST",
-      url: "/export-schedule-excel",
+      url: "api/v1/export-schedule-excel",
       headers: {
         "Content-Type": "application/json",
       },
