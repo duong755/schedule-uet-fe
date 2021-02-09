@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState, Fragment } from "react";
 
 import "./ClassMembers.scss";
 
@@ -31,27 +31,17 @@ export const ClassMembers: React.FC<{}> = () => {
   const getClassMembers = async () => {
     try {
       const res = await axiosCommonInstance({
-        url: "api/v1/get-students",
+        url: "api/v2/get-students",
         method: "GET",
         params: {
-          classCode: classCode,
+          classCode: classCode.toUpperCase(),
         },
       });
       const json = res.data as ClassMembersResponse.Response;
-      if (!(json.data instanceof Array)) {
-        classMembersContext?.setClassInfo(null);
-        classMembersContext?.setStudentsInfo(null);
-      } else {
-        if (json.data.length) {
-          const extractedClassInfo = json
-            .data[0] as ClassMembersResponse.ClassInfo;
-          const extractedStudentInfo = json.data as ClassMembersResponse.StudentInfo[];
-          classMembersContext?.setClassInfo(extractedClassInfo);
-          classMembersContext?.setStudentsInfo(extractedStudentInfo);
-        } else {
-          alert(`Lớp ${classCode} không có sinh viên`);
-        }
-      }
+      const extractedClassInfo = json.data.classInfo;
+      const extractedStudentsInfo = json.data.students;
+      classMembersContext?.setClassInfo(extractedClassInfo);
+      classMembersContext?.setStudentsInfo(extractedStudentsInfo);
     } catch (err) {
       displayOverlay(false);
       console.error(err);
@@ -93,20 +83,35 @@ export const ClassMembers: React.FC<{}> = () => {
           <div>
             Tên môn học:{" "}
             <span className="class--subject-name">
-              {classMembersContext?.classInfo.TenMonHoc}
+              {classMembersContext.classInfo.TenMonHoc}
             </span>
           </div>
           <div>
             Mã lớp môn học:{" "}
             <span className="class--class-code">
-              {classMembersContext?.classInfo.MaLMH}
+              {classMembersContext.classInfo.MaLMH}
             </span>
           </div>
           <div>
             Số tín chỉ:{" "}
             <span className="class--credit">
-              {classMembersContext?.classInfo.SoTinChi}
+              {classMembersContext.classInfo.TinChi}
             </span>
+          </div>
+          <div className="class--group">
+            <dl>
+              {classMembersContext.classInfo.Nhom.map((classGroup) => {
+                return (
+                  <Fragment key={classGroup.Ten}>
+                    <dt>{classGroup.Ten}</dt>
+                    <dd>Thứ {classGroup.Thu} / Tiết {classGroup.Tiet}</dd>
+                    <dd>Giảng đường: {classGroup.GiangDuong}</dd>
+                    <dd>Giảng viên: {classGroup.GiaoVien}</dd>
+                    <dd>Số sinh viên: {classGroup.SoSV}</dd>
+                  </Fragment>
+                );
+              })}
+            </dl>
           </div>
         </div>
       )}
@@ -127,7 +132,7 @@ export const ClassMembers: React.FC<{}> = () => {
               <tbody>
                 {classMembersContext.studentsInfo?.map((student) => {
                   return (
-                    <tr key={student.id}>
+                    <tr key={student._id}>
                       <td>{student.MaSV}</td>
                       <td>{student.HoVaTen}</td>
                       <td>{student.NgaySinh}</td>

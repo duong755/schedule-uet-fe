@@ -1,3 +1,5 @@
+@import '../../_variables.scss';
+
 .student {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -52,11 +54,11 @@
           }
         }
         td.subject.focus {
-          background-color: #0099ff;
+          background-color: $main-color;
           color: #ffffff;
         }
         td.subject:hover {
-          background-color: #0099ff;
+          background-color: $main-color;
           color: #ffffff;
         }
       }

@@ -1,3 +1,5 @@
+@import './_variables.scss';
+
 body {
   padding: 5px 15px;
   margin: 0;
@@ -16,7 +18,7 @@ code {
 }
 
 .active-route {
-  background-color: #0033ff;
+  background-color: $main-color;
   color: #ffffff;
 }
 
@@ -30,11 +32,11 @@ nav {
       a {
         display: inline-block;
         text-decoration: none;
-        color: #0088ff;
+        color: $main-color;
         margin: 5px 5px 5px 0;
         padding: 10px 15px;
         &:hover {
-          background-color: #0099ff;
+          background-color: $main-color;
           color: #ffffff;
           transition: 0.3s;
         }
@@ -53,11 +55,11 @@ nav {
 }
 
 .btn-default {
-    background-color: #0099ff;
+    background-color: $main-color;
 }
 
 .btn-excel {
-    background-color: #1D6F42;
+    background-color: $ms-excel-color;
 }
 
 .overlay {
@@ -90,9 +92,8 @@ form {
         border-radius: 0;
         border: 1px solid #333333;
         &:focus {
-            border: 1px solid #0066ff;
-            outline: 2px solid #0066ff;
-            box-shadow: 0 0 10px #0066ff;
+            border: 1px solid $main-color;
+            outline: 2px solid $main-color;
         }
     }
 }
