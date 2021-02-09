@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState, Fragment } from "react";
 
 import "./ClassMembers.scss";
 
-import { setPageTitle, displayOverlay } from "../../common/helpers";
+import { setPageTitle, displayOverlay, getGroupName } from "../../common/helpers";
 import {
   ClassMembersContext,
   ClassMembersContextData,
@@ -16,11 +16,18 @@ export const ClassMembers: React.FC<{}> = () => {
   const classMembersContext = useContext<
     ClassMembersContextData | null | undefined
   >(ClassMembersContext);
+  const [group, setGroup] = useState<string>("CL");
 
   const handleChangeClassCode: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setClassCode(event.target.value);
+  };
+
+  const handleChangeGroup: (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => void = (event) => {
+    setGroup(event.target.value);
   };
 
   useEffect(() => {
@@ -103,7 +110,7 @@ export const ClassMembers: React.FC<{}> = () => {
               {classMembersContext.classInfo.Nhom.map((classGroup) => {
                 return (
                   <Fragment key={classGroup.Ten}>
-                    <dt>{classGroup.Ten}</dt>
+                    <dt>{getGroupName(classGroup.Ten)}:</dt>
                     <dd>Thứ {classGroup.Thu} / Tiết {classGroup.Tiet}</dd>
                     <dd>Giảng đường: {classGroup.GiangDuong}</dd>
                     <dd>Giảng viên: {classGroup.GiaoVien}</dd>
@@ -119,6 +126,16 @@ export const ClassMembers: React.FC<{}> = () => {
       {classMembersContext?.studentsInfo &&
         classMembersContext?.studentsInfo.length && (
           <div className="students">
+            {classMembersContext?.classInfo?.Nhom &&
+              classMembersContext.classInfo.Nhom.length > 1 && (
+                <div className="students--filter">
+                  <select value={group} onChange={handleChangeGroup}>
+                    {classMembersContext?.classInfo?.Nhom.map((group, groupIndex) => {
+                      return <option key={groupIndex} value={group.Ten}>{getGroupName(group.Ten)}</option>;
+                    })}
+                  </select>
+                </div>
+            )}
             <table>
               <thead>
                 <tr>
@@ -126,21 +143,29 @@ export const ClassMembers: React.FC<{}> = () => {
                   <th>Họ và tên</th>
                   <th>Ngày sinh</th>
                   <th>Lớp khóa học</th>
+                  <th>Nhóm</th>
                   <th>Ghi chú</th>
                 </tr>
               </thead>
               <tbody>
-                {classMembersContext.studentsInfo?.map((student) => {
-                  return (
-                    <tr key={student._id}>
-                      <td>{student.MaSV}</td>
-                      <td>{student.HoVaTen}</td>
-                      <td>{student.NgaySinh}</td>
-                      <td>{student.LopKhoaHoc}</td>
-                      <td>{student.GhiChu}</td>
-                    </tr>
-                  );
-                })}
+                {classMembersContext.studentsInfo?.filter((student) => {
+                  if (group !== "CL") {
+                    return student.Nhom === group;
+                  }
+                  return true;
+                })
+                  .map((student) => {
+                    return (
+                      <tr key={student._id}>
+                        <td>{student.MaSV}</td>
+                        <td>{student.HoVaTen}</td>
+                        <td>{student.NgaySinh}</td>
+                        <td>{student.LopKhoaHoc}</td>
+                        <td>{student.Nhom}</td>
+                        <td>{student.GhiChu}</td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>

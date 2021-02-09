@@ -6,16 +6,20 @@
 }
 
 .students {
+  .students--filter > select {
+    height: 35px;
+    padding: 5px;
+  }
   table {
+    margin-top: 10px;
     border: 1px solid #000000;
     border-collapse: collapse;
-    tr,
-    th,
-    td {
+    tr {
       border: 1px solid #000000;
     }
     th,
     td {
+      border: 1px solid #000000;
       padding: 10px;
     }
     tbody > tr {

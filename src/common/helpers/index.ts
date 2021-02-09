@@ -10,3 +10,10 @@ export function displayOverlay(show: boolean) {
     overlay.style.display = "none";
   }
 }
+
+export function getGroupName(group: string) {
+  if (group === "CL") {
+    return "Chung lớp";
+  }
+  return `Nhóm ${group}`;
+}

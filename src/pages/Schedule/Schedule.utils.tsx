@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 
 import { ScheduleResponse } from "../../types/ScheduleResponse";
 import { PERIODS } from "../../constants";
+import { getGroupName } from "../../common/helpers";
 
 type ScheduleCellProps = {
   className?: string;
@@ -39,7 +40,7 @@ const ScheduleCell: React.FC<ScheduleCellProps> = (props) => {
   return (
     <td className={className} data-subject-id={classCode} rowSpan={periods} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div>
-        <strong>{classCode} ({note})</strong>
+        <strong>{classCode} ({getGroupName(note as string)})</strong>
         <div className="subject--name">{subjectName}</div>
         <div className="subject--room">{room}</div>
         <div className="subject--lecturer">{lecturer}</div>
