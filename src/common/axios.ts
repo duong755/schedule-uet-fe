@@ -9,7 +9,7 @@ const overlayInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
 };
 
 const axiosCommonInstance = axios.create({
-  baseURL: API_DOMAIN
+  baseURL: API_DOMAIN,
 });
 
 axiosCommonInstance.interceptors.request.use(overlayInterceptor);
@@ -21,6 +21,7 @@ axiosCommonInstance.interceptors.response.use(
   (error) => {
     displayOverlay(false);
     return error;
-  });
+  }
+);
 
 export { axiosCommonInstance };

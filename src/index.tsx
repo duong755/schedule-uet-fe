@@ -17,18 +17,18 @@ const links = [
     path: "/",
     exact: true,
     name: "Thời khóa biểu",
-    child: <Schedule />
+    child: <Schedule />,
   },
   {
     path: "/classmembers",
     name: "Danh sách lớp",
-    child: <ClassMembers />
+    child: <ClassMembers />,
   },
   {
     path: "/exam",
     name: "Lịch thi",
-    child: <Exam />
-  }
+    child: <Exam />,
+  },
 ];
 
 ReactDOM.render(

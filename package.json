@@ -15,7 +15,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "./node_modules/.bin/eslint",
+    "format": "./node_modules/.bin/prettier --write ./src"
   },
   "eslintConfig": {
     "extends": [
@@ -36,6 +38,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.29.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -44,6 +47,8 @@
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.7",
-    "node-sass": "^4.0.0"
+    "@typescript-eslint/typescript-estree": "^4.15.0",
+    "node-sass": "^4.0.0",
+    "prettier": "^2.2.1"
   }
 }

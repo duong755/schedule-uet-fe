@@ -23,8 +23,7 @@ export namespace ScheduleResponse {
     message: string;
     data: {
       studentInfo: StudentInfo;
-      classes: ClassInfo[]
+      classes: ClassInfo[];
     };
   };
 }
-

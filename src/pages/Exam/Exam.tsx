@@ -7,9 +7,7 @@ export const Exam: React.FC<{}> = () => {
     setPageTitle("Lịch thi");
   }, []);
 
-  return (
-    <div className="not-implemented">{NOT_IMPLEMENTED}</div>
-  );
+  return <div className="not-implemented">{NOT_IMPLEMENTED}</div>;
 };
 
 Exam.displayName = "Exam";

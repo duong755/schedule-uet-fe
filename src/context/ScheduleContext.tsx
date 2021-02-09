@@ -11,9 +11,7 @@ export type ScheduleContextData = {
 
 export const ScheduleContext = createContext<ScheduleContextData | null | undefined>(null);
 
-export const ScheduleProvider: React.FC<PropsWithChildren<{}>> = (
-  props: PropsWithChildren<{}>
-) => {
+export const ScheduleProvider: React.FC<PropsWithChildren<{}>> = (props: PropsWithChildren<{}>) => {
   const [studentInfo, setStudentInfo] = useState<ScheduleResponse.StudentInfo | null | undefined>(null);
   const [classesInfo, setClassesInfo] = useState<ScheduleResponse.ClassInfo[] | null | undefined>(null);
 

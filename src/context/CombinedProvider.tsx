@@ -6,9 +6,7 @@ import { ClassMembersProvider } from "./ClassMembersContext";
 export const CombinedProvider: React.FC<PropsWithChildren<{}>> = (props) => {
   return (
     <ScheduleProvider>
-      <ClassMembersProvider>
-        {props.children}
-      </ClassMembersProvider>
+      <ClassMembersProvider>{props.children}</ClassMembersProvider>
     </ScheduleProvider>
   );
 };

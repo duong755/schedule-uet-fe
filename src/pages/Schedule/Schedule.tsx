@@ -6,7 +6,6 @@ import { axiosCommonInstance } from "../../common/axios";
 
 import { generateTableBody } from "./Schedule.utils";
 
-
 import "./Schedule.scss";
 import { ScheduleContext, ScheduleContextData } from "../../context/ScheduleContext";
 
@@ -15,9 +14,7 @@ const Schedule: React.FC = () => {
   const scheduleContext = useContext<ScheduleContextData | null | undefined>(ScheduleContext);
   const [studentCode, setStudentCode] = useState("");
 
-  const handleChangeStudentCode: (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => void = (event) => {
+  const handleChangeStudentCode: (event: React.ChangeEvent<HTMLInputElement>) => void = (event) => {
     setStudentCode(event.target.value);
   };
 
@@ -27,11 +24,11 @@ const Schedule: React.FC = () => {
         url: "api/v1/get-schedule",
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         data: {
-          studentCode: studentCode
-        }
+          studentCode: studentCode,
+        },
       });
       const json = res.data as ScheduleResponse.Response;
       if (!json.data) {
@@ -41,7 +38,7 @@ const Schedule: React.FC = () => {
         scheduleContext?.setStudentInfo(json.data.studentInfo);
         scheduleContext?.setClassesInfo(json.data.classes);
       }
-    } catch(err) {
+    } catch (err) {
       displayOverlay(false);
       console.error(err);
     } finally {
@@ -49,9 +46,7 @@ const Schedule: React.FC = () => {
     }
   }, [studentCode, scheduleContext]);
 
-  const handleSubmitStudentCode: (
-    event: React.FormEvent<HTMLFormElement>
-  ) => void = (event) => {
+  const handleSubmitStudentCode: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
     event.preventDefault();
     if (!/^\s*\d{8}\s*$/.test(studentCode)) {
       alert("Nhập mã sinh viên đúng định dạng vào bạn ơi !!!");
@@ -76,8 +71,7 @@ const Schedule: React.FC = () => {
 
     const url = window.URL.createObjectURL(
       new Blob([res.data], {
-        type:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       })
     );
     const link = document.createElement("a");
@@ -104,10 +98,7 @@ const Schedule: React.FC = () => {
           value={studentCode}
           onChange={handleChangeStudentCode}
         />
-        <button
-          type="submit"
-          className="btn btn-default form--button"
-        >
+        <button type="submit" className="btn btn-default form--button">
           Lấy thời khóa biểu
         </button>
       </form>
@@ -120,18 +111,13 @@ const Schedule: React.FC = () => {
               <span className="student--id">{scheduleContext?.studentInfo?.MaSV}</span>
             </div>
             <div>
-              Lớp:{" "}
-              <span className="student--class">{scheduleContext?.studentInfo?.LopKhoaHoc}</span>
+              Lớp: <span className="student--class">{scheduleContext?.studentInfo?.LopKhoaHoc}</span>
             </div>
             <div>
-              Ngày sinh:{" "}
-              <span className="student--birthday">{scheduleContext?.studentInfo?.NgaySinh}</span>
+              Ngày sinh: <span className="student--birthday">{scheduleContext?.studentInfo?.NgaySinh}</span>
             </div>
           </div>
-          <button
-            className="btn btn-excel student--excel"
-            onClick={handleDownloadExcel}
-          >
+          <button className="btn btn-excel student--excel" onClick={handleDownloadExcel}>
             Export Excel
           </button>
         </div>
@@ -152,9 +138,7 @@ const Schedule: React.FC = () => {
                 <th>CN</th>
               </tr>
             </thead>
-            <tbody>
-              {generateTableBody(scheduleContext?.classesInfo)}
-            </tbody>
+            <tbody>{generateTableBody(scheduleContext?.classesInfo)}</tbody>
           </table>
         </div>
       )}

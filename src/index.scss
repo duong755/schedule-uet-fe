@@ -1,4 +1,4 @@
-@import './_variables.scss';
+@import "./_variables.scss";
 
 body {
   padding: 5px 15px;
@@ -9,8 +9,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .not-implemented {
@@ -46,59 +45,58 @@ nav {
 }
 
 .btn {
-    color: #ffffff;
-    border: 0;
-    cursor: pointer;
-    &:focus {
-        outline: 0;
-    }
+  color: #ffffff;
+  border: 0;
+  cursor: pointer;
+  &:focus {
+    outline: 0;
+  }
 }
 
 .btn-default {
-    background-color: $main-color;
+  background-color: $main-color;
 }
 
 .btn-excel {
-    background-color: $ms-excel-color;
+  background-color: $ms-excel-color;
 }
 
 .overlay {
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    left: 0;
-    z-index: 100000;
-    position: fixed;
-    display: none;
-    .loading {
-        font-size: 200%;
-    }
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 100000;
+  position: fixed;
+  display: none;
+  .loading {
+    font-size: 200%;
+  }
 }
 
 form {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 100%;
-    display: flex;
-    .form--input {
-        padding-left: 5px;
-        padding-right: 5px;
-        height: 34px;
-        flex: 1;
-        border-radius: 0;
-        border: 1px solid #333333;
-        &:focus {
-            border: 1px solid $main-color;
-            outline: 2px solid $main-color;
-        }
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  display: flex;
+  .form--input {
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 34px;
+    flex: 1;
+    border-radius: 0;
+    border: 1px solid #333333;
+    &:focus {
+      border: 1px solid $main-color;
+      outline: 2px solid $main-color;
     }
+  }
 }
 
 .form--button {
-    margin-left: 10px;
+  margin-left: 10px;
 }
-

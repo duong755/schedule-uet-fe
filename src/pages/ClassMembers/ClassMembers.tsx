@@ -3,30 +3,21 @@ import { useContext, useEffect, useRef, useState, Fragment } from "react";
 import "./ClassMembers.scss";
 
 import { setPageTitle, displayOverlay, getGroupName } from "../../common/helpers";
-import {
-  ClassMembersContext,
-  ClassMembersContextData,
-} from "../../context/ClassMembersContext";
+import { ClassMembersContext, ClassMembersContextData } from "../../context/ClassMembersContext";
 import { axiosCommonInstance } from "../../common/axios";
 import { ClassMembersResponse } from "../../types/ClassMembersResponse";
 
 export const ClassMembers: React.FC<{}> = () => {
   const classCodeInput = useRef<HTMLInputElement>(null);
   const [classCode, setClassCode] = useState<string>("");
-  const classMembersContext = useContext<
-    ClassMembersContextData | null | undefined
-  >(ClassMembersContext);
+  const classMembersContext = useContext<ClassMembersContextData | null | undefined>(ClassMembersContext);
   const [group, setGroup] = useState<string>("CL");
 
-  const handleChangeClassCode: (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => void = (event) => {
+  const handleChangeClassCode: (event: React.ChangeEvent<HTMLInputElement>) => void = (event) => {
     setClassCode(event.target.value);
   };
 
-  const handleChangeGroup: (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => void = (event) => {
+  const handleChangeGroup: (event: React.ChangeEvent<HTMLSelectElement>) => void = (event) => {
     setGroup(event.target.value);
   };
 
@@ -57,9 +48,7 @@ export const ClassMembers: React.FC<{}> = () => {
     }
   };
 
-  const handleSubmitClassCode: (
-    event: React.FormEvent<HTMLFormElement>
-  ) => void = (event) => {
+  const handleSubmitClassCode: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
     event.preventDefault();
     if (!/^\s*[a-zA-Z]{3}\d{4}\s\d{1,2}\s*/.test(classCode)) {
       alert("Nhập mã lớp môn học đúng định dạng vào bạn ơi !!!");
@@ -88,22 +77,13 @@ export const ClassMembers: React.FC<{}> = () => {
       {classMembersContext?.classInfo && (
         <div className="class">
           <div>
-            Tên môn học:{" "}
-            <span className="class--subject-name">
-              {classMembersContext.classInfo.TenMonHoc}
-            </span>
+            Tên môn học: <span className="class--subject-name">{classMembersContext.classInfo.TenMonHoc}</span>
           </div>
           <div>
-            Mã lớp môn học:{" "}
-            <span className="class--class-code">
-              {classMembersContext.classInfo.MaLMH}
-            </span>
+            Mã lớp môn học: <span className="class--class-code">{classMembersContext.classInfo.MaLMH}</span>
           </div>
           <div>
-            Số tín chỉ:{" "}
-            <span className="class--credit">
-              {classMembersContext.classInfo.TinChi}
-            </span>
+            Số tín chỉ: <span className="class--credit">{classMembersContext.classInfo.TinChi}</span>
           </div>
           <div className="class--group">
             <dl>
@@ -111,7 +91,9 @@ export const ClassMembers: React.FC<{}> = () => {
                 return (
                   <Fragment key={classGroup.Ten}>
                     <dt>{getGroupName(classGroup.Ten)}:</dt>
-                    <dd>Thứ {classGroup.Thu} / Tiết {classGroup.Tiet}</dd>
+                    <dd>
+                      Thứ {classGroup.Thu} / Tiết {classGroup.Tiet}
+                    </dd>
                     <dd>Giảng đường: {classGroup.GiangDuong}</dd>
                     <dd>Giảng viên: {classGroup.GiaoVien}</dd>
                     <dd>Số sinh viên: {classGroup.SoSV}</dd>
@@ -123,53 +105,56 @@ export const ClassMembers: React.FC<{}> = () => {
         </div>
       )}
 
-      {classMembersContext?.studentsInfo &&
-        classMembersContext?.studentsInfo.length && (
-          <div className="students">
-            {classMembersContext?.classInfo?.Nhom &&
-              classMembersContext.classInfo.Nhom.length > 1 && (
-                <div className="students--filter">
-                  <select value={group} onChange={handleChangeGroup}>
-                    {classMembersContext?.classInfo?.Nhom.map((group, groupIndex) => {
-                      return <option key={groupIndex} value={group.Ten}>{getGroupName(group.Ten)}</option>;
-                    })}
-                  </select>
-                </div>
-            )}
-            <table>
-              <thead>
-                <tr>
-                  <th title="Mã số sinh viên">MSSV</th>
-                  <th>Họ và tên</th>
-                  <th>Ngày sinh</th>
-                  <th>Lớp khóa học</th>
-                  <th>Nhóm</th>
-                  <th>Ghi chú</th>
-                </tr>
-              </thead>
-              <tbody>
-                {classMembersContext.studentsInfo?.filter((student) => {
+      {classMembersContext?.studentsInfo && classMembersContext?.studentsInfo.length && (
+        <div className="students">
+          {classMembersContext?.classInfo?.Nhom && classMembersContext.classInfo.Nhom.length > 1 && (
+            <div className="students--filter">
+              <select value={group} onChange={handleChangeGroup}>
+                {classMembersContext?.classInfo?.Nhom.map((group, groupIndex) => {
+                  return (
+                    <option key={groupIndex} value={group.Ten}>
+                      {getGroupName(group.Ten)}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          )}
+          <table>
+            <thead>
+              <tr>
+                <th title="Mã số sinh viên">MSSV</th>
+                <th>Họ và tên</th>
+                <th>Ngày sinh</th>
+                <th>Lớp khóa học</th>
+                <th>Nhóm</th>
+                <th>Ghi chú</th>
+              </tr>
+            </thead>
+            <tbody>
+              {classMembersContext.studentsInfo
+                ?.filter((student) => {
                   if (group !== "CL") {
                     return student.Nhom === group;
                   }
                   return true;
                 })
-                  .map((student) => {
-                    return (
-                      <tr key={student._id}>
-                        <td>{student.MaSV}</td>
-                        <td>{student.HoVaTen}</td>
-                        <td>{student.NgaySinh}</td>
-                        <td>{student.LopKhoaHoc}</td>
-                        <td>{student.Nhom}</td>
-                        <td>{student.GhiChu}</td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-        )}
+                .map((student) => {
+                  return (
+                    <tr key={student._id}>
+                      <td>{student.MaSV}</td>
+                      <td>{student.HoVaTen}</td>
+                      <td>{student.NgaySinh}</td>
+                      <td>{student.LopKhoaHoc}</td>
+                      <td>{student.Nhom}</td>
+                      <td>{student.GhiChu}</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 };

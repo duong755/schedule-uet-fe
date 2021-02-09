@@ -1,24 +1,24 @@
 .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: initial;
+  }
+  .header--github-repo,
+  .header--credit {
+    text-align: right;
     @media (max-width: 768px) {
-        flex-direction: column;
-        align-items: initial;
+      text-align: left;
     }
-    .header--github-repo,
-    .header--credit {
-        text-align: right;
-        @media (max-width: 768px) {
-            text-align: left;
-        }
-        a {
-            color: #0099ff;
-            text-decoration: none;
-        }
+    a {
+      color: #0099ff;
+      text-decoration: none;
     }
-    .header--credit {
-        display: none;
-    }
+  }
+  .header--credit {
+    display: none;
+  }
 }

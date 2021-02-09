@@ -1,4 +1,4 @@
-@import '../../_variables.scss';
+@import "../../_variables.scss";
 
 .student {
   padding-top: 10px;
@@ -7,7 +7,7 @@
   justify-content: space-between;
   .student--excel {
     height: 34px;
-      align-self: center;
+    align-self: center;
   }
 }
 
@@ -31,7 +31,7 @@
           &:nth-child(1) {
             width: 20px;
           }
-          &:nth-child(n+2) {
+          &:nth-child(n + 2) {
             width: 200px;
           }
         }

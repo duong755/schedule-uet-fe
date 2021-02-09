@@ -1,0 +1,17 @@
+{
+  "parser": "typescript",
+  "printWidth": 120,
+  "semi": true,
+  "tabWidth": 2,
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": "**/*.scss",
+      "options": {
+        "parser": "scss",
+        "tabWidth": 2,
+        "singleQuote": false
+      }
+    }
+  ]
+}
