@@ -50,7 +50,7 @@ export const ClassMembers: React.FC<{}> = () => {
 
   const handleSubmitClassCode: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
     event.preventDefault();
-    if (!/^\s*[a-zA-Z]{3}\d{4}\s\d{1,2}\s*/.test(classCode)) {
+    if (!/^\s*[a-zA-Z]{3}\d{4}[eE]?\s\d{1,2}\s*/.test(classCode)) {
       alert("Nhập mã lớp môn học đúng định dạng vào bạn ơi !!!");
     } else {
       setClassCode(classCode.trim());
@@ -141,7 +141,7 @@ export const ClassMembers: React.FC<{}> = () => {
                 })
                 .map((student) => {
                   return (
-                    <tr key={student._id}>
+                    <tr key={student.MaSV}>
                       <td>{student.MaSV}</td>
                       <td>{student.HoVaTen}</td>
                       <td>{student.NgaySinh}</td>
