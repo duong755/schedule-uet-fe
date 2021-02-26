@@ -16,7 +16,8 @@ const Header: React.FC = () => {
       </div>
       <div className="header--github-repo">
         <a href="https://github.com/duong755/schedule-uet-fe/issues" rel="noreferrer" target="_blank">
-          <FaGithub />&nbsp;Góp ý
+          <FaGithub />
+          &nbsp;Góp ý
         </a>
       </div>
     </div>

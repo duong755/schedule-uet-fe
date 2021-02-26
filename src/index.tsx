@@ -34,7 +34,7 @@ const links = [
     path: "/contact",
     name: "Liên hệ",
     child: <Contact />,
-  }
+  },
 ];
 
 ReactDOM.render(
