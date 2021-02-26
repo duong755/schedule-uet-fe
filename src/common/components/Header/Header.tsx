@@ -1,3 +1,5 @@
+import { FaGithub } from "react-icons/fa";
+
 import "./Header.scss";
 
 const month = new Date().getUTCMonth() + 1;
@@ -13,15 +15,9 @@ const Header: React.FC = () => {
         </h3>
       </div>
       <div className="header--github-repo">
-        <a href="https://github.com/duong755/schedule-uet-fe/issues">Góp ý</a>
-      </div>
-      <div className="header--credit">
-        <div>
-          <a href="https://www.facebook.com/nguyenxuanhoang30799">Nguyễn Xuân Hoàng</a>
-        </div>
-        <div>
-          <a href="https://github.com/duong755/schedule-uet-fe">Ngô Quang Dương</a>
-        </div>
+        <a href="https://github.com/duong755/schedule-uet-fe/issues" rel="noreferrer" target="_blank">
+          <FaGithub />&nbsp;Góp ý
+        </a>
       </div>
     </div>
   );

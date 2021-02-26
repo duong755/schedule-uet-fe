@@ -1,3 +1,5 @@
+@import "../../../variables";
+
 .header {
   display: flex;
   flex-direction: row;
@@ -14,11 +16,18 @@
       text-align: left;
     }
     a {
-      color: #0099ff;
+      color: $main-color;
       text-decoration: none;
     }
   }
-  .header--credit {
-    display: none;
+  .header--github-repo {
+    font-size: 120%;
+    margin-bottom: 15px;
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #0033ff;
+    }
   }
 }
