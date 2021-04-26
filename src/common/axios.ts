@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 import { API_DOMAIN } from "../constants";
-import { displayOverlay } from "./helpers";
+import { displayOverlay } from "../common/helpers";
 
 const overlayInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
   displayOverlay(true);

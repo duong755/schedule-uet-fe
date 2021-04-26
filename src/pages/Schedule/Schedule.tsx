@@ -10,80 +10,52 @@ import "./Schedule.scss";
 import { ScheduleContext, ScheduleContextData } from "../../context/ScheduleContext";
 
 const Schedule: React.FC = () => {
-  const studentCodeInput = useRef<HTMLInputElement>(null);
+  const studentIdInput = useRef<HTMLInputElement>(null);
   const scheduleContext = useContext<ScheduleContextData | null | undefined>(ScheduleContext);
-  const [studentCode, setStudentCode] = useState("");
+  const [studentId, setStudentId] = useState("");
 
   const handleChangeStudentCode: (event: React.ChangeEvent<HTMLInputElement>) => void = (event) => {
-    setStudentCode(event.target.value);
+    setStudentId(event.target.value);
   };
 
   const getSchedule = useCallback<() => Promise<void>>(async () => {
     try {
       const res = await axiosCommonInstance({
-        url: "api/v1/get-schedule",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+        url: "api/v2/schedules",
+        params: {
+          studentId: studentId
         },
-        data: {
-          studentCode: studentCode,
-        },
+        method: "GET"
       });
-      const json = res.data as ScheduleResponse.Response;
-      if (!json.data) {
-        scheduleContext?.setStudentInfo(null);
-        scheduleContext?.setClassesInfo(null);
-      } else {
-        scheduleContext?.setStudentInfo(json.data.studentInfo);
-        scheduleContext?.setClassesInfo(json.data.classes);
-      }
+      const json = res.data as ScheduleResponse;
+
+      const { classes, ...studentInfo } = json;
+      scheduleContext?.setStudentInfo(studentInfo);
+      scheduleContext?.setClassesInfo(classes);
     } catch (err) {
       displayOverlay(false);
       console.error(err);
     } finally {
-      setStudentCode("");
+      setStudentId("");
     }
-  }, [studentCode, scheduleContext]);
+  }, [studentId, scheduleContext]);
 
   const handleSubmitStudentCode: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
     event.preventDefault();
-    if (!/^\s*\d{8}\s*$/.test(studentCode)) {
-      alert("Nhập mã sinh viên đúng định dạng vào bạn ơi !!!");
+    if (!/^\s*\d{8}\s*$/.test(studentId)) {
+      alert("Mã sinh viên không đúng định dạng");
     } else {
-      setStudentCode(studentCode.trim());
+      setStudentId(studentId.trim());
       getSchedule();
     }
   };
 
   const handleDownloadExcel = async () => {
-    const res = await axiosCommonInstance({
-      method: "POST",
-      url: "api/v1/export-schedule-excel",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      responseType: "arraybuffer",
-      data: {
-        studentCode: scheduleContext?.studentInfo?.MaSV,
-      },
-    });
-
-    const url = window.URL.createObjectURL(
-      new Blob([res.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      })
-    );
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "Schedule.xlsx");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    alert("Tính năng này đang được cập nhật. Xin lỗi vì sự cố này :(((");
   };
 
   useEffect(() => {
-    studentCodeInput.current?.focus();
+    studentIdInput.current?.focus();
     setPageTitle("Thời khóa biểu");
   }, []);
 
@@ -91,11 +63,11 @@ const Schedule: React.FC = () => {
     <>
       <form onSubmit={handleSubmitStudentCode}>
         <input
-          ref={studentCodeInput}
+          ref={studentIdInput}
           type="text"
           placeholder="Nhập mã số sinh viên"
           className="form--input"
-          value={studentCode}
+          value={studentId}
           onChange={handleChangeStudentCode}
         />
         <button type="submit" className="btn btn-default form--button">
@@ -107,14 +79,14 @@ const Schedule: React.FC = () => {
         <div className="student">
           <div>
             <div>
-              <span className="student--name">{scheduleContext?.studentInfo?.HoVaTen}</span>/
-              <span className="student--id">{scheduleContext?.studentInfo?.MaSV}</span>
+              <span className="student--name">{scheduleContext?.studentInfo?.studentName}</span>/
+              <span className="student--id">{scheduleContext?.studentInfo?.studentId}</span>
             </div>
             <div>
-              Lớp: <span className="student--class">{scheduleContext?.studentInfo?.LopKhoaHoc}</span>
+              Lớp: <span className="student--class">{scheduleContext?.studentInfo?.studentCourse}</span>
             </div>
             <div>
-              Ngày sinh: <span className="student--birthday">{scheduleContext?.studentInfo?.NgaySinh}</span>
+              Ngày sinh: <span className="student--birthday">{scheduleContext?.studentInfo?.studentBirthday}</span>
             </div>
           </div>
           <button className="btn btn-excel student--excel" onClick={handleDownloadExcel}>

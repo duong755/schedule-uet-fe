@@ -1,16 +1,16 @@
 import { PropsWithChildren } from "react";
 
 import { ScheduleResponse } from "../../types/ScheduleResponse";
-import { PERIODS } from "../../constants";
 import { getGroupName } from "../../common/helpers";
+import { PERIODS } from "../../constants";
 
 type ScheduleCellProps = {
   className?: string;
-  classCode?: string;
-  lecturer?: string;
+  classId?: string;
+  teacher?: string;
   subjectName?: string;
   numberOfStudents?: string | number;
-  room?: string;
+  place?: string;
   note?: string;
   periods?: number;
 };
@@ -34,29 +34,29 @@ const ScheduleCell: React.FC<ScheduleCellProps> = (props) => {
       matchSubject.classList.remove("focus");
     });
   };
-  const { classCode, periods, lecturer, subjectName, numberOfStudents, room, note, className } = props;
+  const { classId, periods, teacher, subjectName, numberOfStudents, place, note, className } = props;
   return (
     <td
       className={className}
-      data-subject-id={classCode}
+      data-subject-id={classId}
       rowSpan={periods}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div>
         <strong>
-          {classCode} ({getGroupName(note as string)})
+          {classId} ({getGroupName(note as string)})
         </strong>
         <div className="subject--name">{subjectName}</div>
-        <div className="subject--room">{room}</div>
-        <div className="subject--lecturer">{lecturer}</div>
+        <div className="subject--room">{place}</div>
+        <div className="subject--lecturer">{teacher}</div>
         <div>Số sinh viên: {numberOfStudents}</div>
       </div>
     </td>
   );
 };
 
-export function generateTableBody(classes: ScheduleResponse.ClassInfo[] | null | undefined): React.ReactNode {
+export function generateTableBody(classes: ScheduleResponse["classes"] | null | undefined): React.ReactNode {
   const defaultRow: (ScheduleCellPropsWithChildren | null)[] = [...Array(8)].map(() => ({}));
   const tablePropsValues: (ScheduleCellPropsWithChildren | null)[][] = [
     ...Array<(ScheduleCellPropsWithChildren | null)[]>(14),
@@ -69,24 +69,23 @@ export function generateTableBody(classes: ScheduleResponse.ClassInfo[] | null |
   if (classes) {
     for (let classIndex = 0; classIndex < classes.length; classIndex++) {
       const classItem = classes[classIndex];
-      const { MaLopMH, GiangDuong, GiaoVien, TenMonHoc, SoSV, GhiChu } = classItem;
-      const { Thu, Tiet } = classItem as { Thu: number; Tiet: number[] };
-      const firstPeriod = Tiet[0];
-      const lastPeriod = Tiet.slice(0).pop() as number;
-      for (let periodIndex = 0; periodIndex < Tiet.length; periodIndex++) {
+      const { classId, place, teacher, subjectName, numberOfStudents, note, weekDay, periods } = classItem;
+      const firstPeriod = periods[0];
+      const lastPeriod = periods[periods.length - 1];
+      for (let periodIndex = 0; periodIndex < periods.length; periodIndex++) {
         if (periodIndex === 0) {
-          tablePropsValues[Tiet[periodIndex] - 1][Thu - 1] = {
+          tablePropsValues[periods[periodIndex] - 1][weekDay - 1] = {
             className: "subject",
-            classCode: MaLopMH,
-            note: GhiChu,
+            classId: classId,
+            note: note,
             periods: lastPeriod - firstPeriod + 1,
-            subjectName: TenMonHoc,
-            room: GiangDuong,
-            lecturer: GiaoVien,
-            numberOfStudents: SoSV,
+            subjectName: subjectName,
+            place: place,
+            teacher: teacher,
+            numberOfStudents: numberOfStudents,
           };
         } else {
-          tablePropsValues[Tiet[periodIndex] - 1][Thu - 1] = null;
+          tablePropsValues[periods[periodIndex] - 1][weekDay - 1] = null;
         }
       }
     }

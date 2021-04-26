@@ -2,18 +2,21 @@ import { createContext, PropsWithChildren, useState } from "react";
 
 import { ClassMembersResponse } from "../types/ClassMembersResponse";
 
+type ClassInfo = Omit<ClassMembersResponse, "students">;
+type StudentsInfo = Pick<ClassMembersResponse, "students">["students"];
+
 export type ClassMembersContextData = {
-  classInfo: ClassMembersResponse.ClassInfo | null | undefined;
-  studentsInfo: ClassMembersResponse.StudentInfo[] | null | undefined;
-  setClassInfo: (classInfo: ClassMembersResponse.ClassInfo | null | undefined) => any;
-  setStudentsInfo: (studentsInfo: ClassMembersResponse.StudentInfo[] | null | undefined) => any;
+  classInfo: ClassInfo | null | undefined;
+  studentsInfo: Pick<ClassMembersResponse, "students">["students"] | null | undefined;
+  setClassInfo: (classInfo: ClassInfo | null | undefined) => any;
+  setStudentsInfo: (studentsInfo: StudentsInfo | null | undefined) => any;
 };
 
 export const ClassMembersContext = createContext<ClassMembersContextData | null | undefined>(null);
 
 export const ClassMembersProvider: React.FC<PropsWithChildren<{}>> = (props) => {
-  const [classInfo, setClassInfo] = useState<ClassMembersResponse.ClassInfo | null | undefined>(null);
-  const [studentsInfo, setStudentsInfo] = useState<ClassMembersResponse.StudentInfo[] | null | undefined>(null);
+  const [classInfo, setClassInfo] = useState<ClassInfo | null | undefined>(null);
+  const [studentsInfo, setStudentsInfo] = useState<StudentsInfo | null | undefined>(null);
 
   return (
     <ClassMembersContext.Provider value={{ classInfo, studentsInfo, setClassInfo, setStudentsInfo }}>
