@@ -33,7 +33,7 @@ export const ClassMembers: React.FC<{}> = () => {
         params: {
           classId: classId.toUpperCase(),
         },
-        method: "GET"
+        method: "GET",
       });
       const json = res.data as ClassMembersResponse;
       const { students: extractedStudentsInfo, ...extractedClassInfo } = json;
@@ -80,8 +80,7 @@ export const ClassMembers: React.FC<{}> = () => {
           <div>
             Số tín chỉ: <span className="class--credit">{classMembersContext.classInfo.credit}</span>
           </div>
-          <div className="class--group">
-          </div>
+          <div className="class--group"></div>
         </div>
       )}
 
@@ -94,23 +93,21 @@ export const ClassMembers: React.FC<{}> = () => {
                 <th>Họ và tên</th>
                 <th>Ngày sinh</th>
                 <th>Lớp khóa học</th>
-                <th>Nhóm</th>
                 <th>Ghi chú</th>
               </tr>
             </thead>
             <tbody>
-              {classMembersContext.studentsInfo
-                ?.map((student) => {
-                  return (
-                    <tr key={student.studentId}>
-                      <td>{student.studentId}</td>
-                      <td>{student.studentName}</td>
-                      <td>{student.studentBirthday}</td>
-                      <td>{student.studentCourse}</td>
-                      <td>{student.studentNote}</td>
-                    </tr>
-                  );
-                })}
+              {classMembersContext.studentsInfo?.map((student) => {
+                return (
+                  <tr key={student.studentId}>
+                    <td>{student.studentId}</td>
+                    <td>{student.studentName}</td>
+                    <td>{student.studentBirthday}</td>
+                    <td>{student.studentCourse}</td>
+                    <td>{student.studentNote}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

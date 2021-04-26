@@ -23,9 +23,9 @@ const Schedule: React.FC = () => {
       const res = await axiosCommonInstance({
         url: "api/v2/schedules",
         params: {
-          studentId: studentId
+          studentId: studentId,
         },
-        method: "GET"
+        method: "GET",
       });
       const json = res.data as ScheduleResponse;
 
