@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState, Fragment } from "react";
 
 import "./ClassMembers.scss";
 
-import { setPageTitle, displayOverlay } from "../../common/helpers";
+import { setPageTitle, displayOverlay, getGroupName } from "../../common/helpers";
 import { ClassMembersContext, ClassMembersContextData } from "../../context/ClassMembersContext";
 import { axiosCommonInstance } from "../../common/axios";
 import { ClassMembersResponse } from "../../types/ClassMembersResponse";
@@ -80,6 +80,9 @@ export const ClassMembers: React.FC<{}> = () => {
           <div>
             Số tín chỉ: <span className="class--credit">{classMembersContext.classInfo.credit}</span>
           </div>
+          <div>
+            Giảng viên: <span className="class--teacher">{classMembersContext.classInfo.teacher}</span>
+          </div>
           <div className="class--group"></div>
         </div>
       )}
@@ -94,6 +97,7 @@ export const ClassMembers: React.FC<{}> = () => {
                 <th>Ngày sinh</th>
                 <th>Lớp khóa học</th>
                 <th>Ghi chú</th>
+                <th>Nhóm</th>
               </tr>
             </thead>
             <tbody>
@@ -105,6 +109,7 @@ export const ClassMembers: React.FC<{}> = () => {
                     <td>{student.studentBirthday}</td>
                     <td>{student.studentCourse}</td>
                     <td>{student.studentNote}</td>
+                    <td>{getGroupName(student.classNote)}</td>
                   </tr>
                 );
               })}

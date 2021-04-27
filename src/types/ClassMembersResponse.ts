@@ -5,6 +5,7 @@ interface Student {
   studentBirthday: string;
   studentCourse: string;
   studentNote: string;
+  classNote: string;
 }
 
 export interface ClassMembersResponse {
