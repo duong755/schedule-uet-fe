@@ -96,7 +96,6 @@ export const ClassMembers: React.FC<{}> = () => {
                     </dd>
                     <dd>Giảng đường: {classGroup.GiangDuong}</dd>
                     <dd>Giảng viên: {classGroup.GiaoVien}</dd>
-                    <dd>Số sinh viên: {classGroup.SoSV}</dd>
                   </Fragment>
                 );
               })}
