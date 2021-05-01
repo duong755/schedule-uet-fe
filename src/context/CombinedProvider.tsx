@@ -1,12 +1,12 @@
 import { PropsWithChildren } from "react";
 
-import { ScheduleProvider } from "./ScheduleContext";
+import { SchedulesProvider } from "./SchedulesContext";
 import { ClassMembersProvider } from "./ClassMembersContext";
 
 export const CombinedProvider: React.FC<PropsWithChildren<{}>> = (props) => {
   return (
-    <ScheduleProvider>
+    <SchedulesProvider>
       <ClassMembersProvider>{props.children}</ClassMembersProvider>
-    </ScheduleProvider>
+    </SchedulesProvider>
   );
 };

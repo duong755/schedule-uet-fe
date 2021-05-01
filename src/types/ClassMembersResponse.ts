@@ -1,38 +1,39 @@
-export namespace ClassMembersResponse {
-  export type ClassGroup = {
-    GiaoVien: string;
-    SoSV: string | number;
-    Thu: string | number;
-    Tiet: string;
-    GiangDuong: string;
-    Ten: string;
+interface ClassGroup {
+  session: string;
+  weekDay: {
+    $numberInt: number;
   };
+  periods: {
+    $numberInt: string;
+  }[];
+  place: string;
+  teacher: string;
+  note: string;
+}
 
-  export type ClassInfo = {
-    MaLMH: string;
-    TenMonHoc: string;
-    TinChi: number | string;
-    Nhom: ClassGroup[];
+interface Student {
+  _id: {
+    $oid: string;
   };
+  studentId: string;
+  studentName: string;
+  studentBirthday: string;
+  studentCourse: string;
+  classId: string;
+  classNote: string;
+  studentNote: string;
+}
 
-  export type StudentInfo = {
-    _id: string;
-    MaSV: string;
-    HoVaTen: string;
-    NgaySinh: string;
-    LopKhoaHoc: string;
-    MaLMH: string;
-    TenMonHoc: string;
-    Nhom: string;
-    SoTinChi: number;
-    GhiChu: string;
+export interface ClassMembersResponse {
+  _id: {
+    $oid: string;
   };
-
-  export type Response = {
-    message: string;
-    data: {
-      classInfo: ClassInfo;
-      students: StudentInfo[];
-    };
+  classId: string;
+  subjectId: string;
+  subjectName: string;
+  credit: {
+    $numberInt: string;
   };
+  groups: ClassGroup[];
+  students: Student[];
 }

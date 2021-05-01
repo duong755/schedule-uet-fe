@@ -1,16 +1,16 @@
 import { PropsWithChildren } from "react";
 
-import { ScheduleResponse } from "../../types/ScheduleResponse";
+import { Class } from "../../types/SchedulesResponse";
 import { PERIODS } from "../../constants";
 import { getGroupName } from "../../common/helpers";
 
 type ScheduleCellProps = {
   className?: string;
-  classCode?: string;
-  lecturer?: string;
+  classId?: string;
+  teacher?: string;
   subjectName?: string;
-  numberOfStudents?: string | number;
-  room?: string;
+  numberOfStudents?: number;
+  place?: string;
   note?: string;
   periods?: number;
 };
@@ -34,29 +34,29 @@ const ScheduleCell: React.FC<ScheduleCellProps> = (props) => {
       matchSubject.classList.remove("focus");
     });
   };
-  const { classCode, periods, lecturer, subjectName, numberOfStudents, room, note, className } = props;
+  const { classId, periods, teacher, subjectName, numberOfStudents, place, note, className } = props;
   return (
     <td
       className={className}
-      data-subject-id={classCode}
+      data-subject-id={classId}
       rowSpan={periods}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div>
         <strong>
-          {classCode} ({getGroupName(note as string)})
+          {classId} ({getGroupName(note as string)})
         </strong>
         <div className="subject--name">{subjectName}</div>
-        <div className="subject--room">{room}</div>
-        <div className="subject--lecturer">{lecturer}</div>
+        <div className="subject--place">{place}</div>
+        <div className="subject--teacher">{teacher}</div>
         <div>Số sinh viên: {numberOfStudents}</div>
       </div>
     </td>
   );
 };
 
-export function generateTableBody(classes: ScheduleResponse.ClassInfo[] | null | undefined): React.ReactNode {
+export function generateTableBody(classes: Class[] | null | undefined): React.ReactNode {
   const defaultRow: (ScheduleCellPropsWithChildren | null)[] = [...Array(8)].map(() => ({}));
   const tablePropsValues: (ScheduleCellPropsWithChildren | null)[][] = [
     ...Array<(ScheduleCellPropsWithChildren | null)[]>(14),
@@ -69,24 +69,26 @@ export function generateTableBody(classes: ScheduleResponse.ClassInfo[] | null |
   if (classes) {
     for (let classIndex = 0; classIndex < classes.length; classIndex++) {
       const classItem = classes[classIndex];
-      const { MaLopMH, GiangDuong, GiaoVien, TenMonHoc, SoSV, GhiChu } = classItem;
-      const { Thu, Tiet } = classItem as { Thu: number; Tiet: number[] };
-      const firstPeriod = Tiet[0];
-      const lastPeriod = Tiet.slice(0).pop() as number;
-      for (let periodIndex = 0; periodIndex < Tiet.length; periodIndex++) {
+      const { classId, subjectName, place, numberOfStudents, note, teacher } = classItem;
+      const { weekDay, periods } = classItem;
+      const firstPeriod = Number(periods[0].$numberDouble);
+      const lastPeriod = Number(periods[periods.length - 1].$numberDouble);
+      for (let periodIndex = 0; periodIndex < periods.length; periodIndex++) {
+        const periodAsNumber = Number(periods[periodIndex].$numberDouble);
+        const weekDayAsNumber = Number(weekDay.$numberDouble);
         if (periodIndex === 0) {
-          tablePropsValues[Tiet[periodIndex] - 1][Thu - 1] = {
+          tablePropsValues[periodAsNumber - 1][weekDayAsNumber - 1] = {
             className: "subject",
-            classCode: MaLopMH,
-            note: GhiChu,
+            classId: classId,
+            note: note,
             periods: lastPeriod - firstPeriod + 1,
-            subjectName: TenMonHoc,
-            room: GiangDuong,
-            lecturer: GiaoVien,
-            numberOfStudents: SoSV,
+            subjectName: subjectName,
+            place: place,
+            teacher: teacher,
+            numberOfStudents: Number(numberOfStudents.$numberDouble),
           };
         } else {
-          tablePropsValues[Tiet[periodIndex] - 1][Thu - 1] = null;
+          tablePropsValues[periodAsNumber - 1][weekDayAsNumber - 1] = null;
         }
       }
     }
