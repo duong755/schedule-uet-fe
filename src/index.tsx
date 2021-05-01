@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 
 import { Header } from "./common/components/Header/Header";
 
-import { Schedule } from "./pages/Schedule/Schedule";
+import { Schedule } from "./pages/Schedules/Schedules";
 import { ClassMembers } from "./pages/ClassMembers/ClassMembers";
 import { Exam } from "./pages/Exam/Exam";
 import { Contact } from "./pages/Contact/Contact";

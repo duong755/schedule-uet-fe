@@ -4,17 +4,17 @@ import "./ClassMembers.scss";
 
 import { setPageTitle, displayOverlay, getGroupName } from "../../common/helpers";
 import { ClassMembersContext, ClassMembersContextData } from "../../context/ClassMembersContext";
-import { axiosCommonInstance } from "../../common/axios";
+import { axiosClassMembersInstance } from "../../common/axios";
 import { ClassMembersResponse } from "../../types/ClassMembersResponse";
 
 export const ClassMembers: React.FC<{}> = () => {
-  const classCodeInput = useRef<HTMLInputElement>(null);
-  const [classCode, setClassCode] = useState<string>("");
+  const classIdInput = useRef<HTMLInputElement>(null);
+  const [classId, setClassId] = useState<string>("");
   const classMembersContext = useContext<ClassMembersContextData | null | undefined>(ClassMembersContext);
   const [group, setGroup] = useState<string>("CL");
 
-  const handleChangeClassCode: (event: React.ChangeEvent<HTMLInputElement>) => void = (event) => {
-    setClassCode(event.target.value);
+  const handleChangeClassId: (event: React.ChangeEvent<HTMLInputElement>) => void = (event) => {
+    setClassId(event.target.value);
   };
 
   const handleChangeGroup: (event: React.ChangeEvent<HTMLSelectElement>) => void = (event) => {
@@ -23,51 +23,43 @@ export const ClassMembers: React.FC<{}> = () => {
 
   useEffect(() => {
     setPageTitle("Danh sách lớp");
-    classCodeInput.current?.focus();
+    classIdInput.current?.focus();
   }, []);
 
   const getClassMembers = async () => {
     try {
-      const res = await axiosCommonInstance({
-        url: "api/v2/get-students",
+      const res = await axiosClassMembersInstance({
         method: "GET",
         params: {
-          classCode: classCode.toUpperCase(),
+          classId: classId.toUpperCase(),
         },
       });
-      const json = res.data as ClassMembersResponse.Response;
-      const extractedClassInfo = json.data.classInfo;
-      const extractedStudentsInfo = json.data.students;
-      classMembersContext?.setClassInfo(extractedClassInfo);
-      classMembersContext?.setStudentsInfo(extractedStudentsInfo);
+      const json = res.data as ClassMembersResponse;
+      classMembersContext?.setClassInfo({ _id: json._id, classId: json.classId, credit: json.credit, subjectId: json.subjectId, subjectName: json.subjectName, groups: json.groups });
+      classMembersContext?.setStudentsInfo(json.students);
     } catch (err) {
       displayOverlay(false);
       console.error(err);
     } finally {
-      setClassCode("");
+      setClassId("");
     }
   };
 
-  const handleSubmitClassCode: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
+  const handleSubmitClassId: (event: React.FormEvent<HTMLFormElement>) => void = (event) => {
     event.preventDefault();
-    if (!/^\s*[a-zA-Z]{3}\d{4}[eE]?\s\d{1,2}\s*/.test(classCode)) {
-      alert("Nhập mã lớp môn học đúng định dạng vào bạn ơi !!!");
-    } else {
-      setClassCode(classCode.trim());
-      getClassMembers();
-    }
+    getClassMembers();
   };
 
   return (
     <>
-      <form onSubmit={handleSubmitClassCode}>
+      <form onSubmit={handleSubmitClassId}>
         <input
-          ref={classCodeInput}
+          ref={classIdInput}
           type="text"
           placeholder="Nhập mã lớp môn học"
           className="form--input"
-          value={classCode}
-          onChange={handleChangeClassCode}
+          value={classId}
+          onChange={handleChangeClassId}
         />
         <button type="submit" className="btn btn-default form--button">
           Lấy danh sách lớp
@@ -77,25 +69,28 @@ export const ClassMembers: React.FC<{}> = () => {
       {classMembersContext?.classInfo && (
         <div className="class">
           <div>
-            Tên môn học: <span className="class--subject-name">{classMembersContext.classInfo.TenMonHoc}</span>
+            Tên môn học: <span className="class--subject-name">{classMembersContext.classInfo.subjectName}</span>
           </div>
           <div>
-            Mã lớp môn học: <span className="class--class-code">{classMembersContext.classInfo.MaLMH}</span>
+            Mã lớp môn học: <span className="class--class-id">{classMembersContext.classInfo.classId}</span>
           </div>
           <div>
-            Số tín chỉ: <span className="class--credit">{classMembersContext.classInfo.TinChi}</span>
+            Số tín chỉ: <span className="class--credit">{classMembersContext.classInfo.credit.$numberInt}</span>
           </div>
           <div className="class--group">
             <dl>
-              {classMembersContext.classInfo.Nhom.map((classGroup) => {
+              {classMembersContext.classInfo.groups.map((group, groupIndex) => {
                 return (
-                  <Fragment key={classGroup.Ten}>
-                    <dt>{getGroupName(classGroup.Ten)}:</dt>
+                  <Fragment key={groupIndex}>
+                    <dt>{getGroupName(group.note)}:</dt>
                     <dd>
-                      Thứ {classGroup.Thu} / Tiết {classGroup.Tiet}
+                      Thứ {group.weekDay.$numberInt}
                     </dd>
-                    <dd>Giảng đường: {classGroup.GiangDuong}</dd>
-                    <dd>Giảng viên: {classGroup.GiaoVien}</dd>
+                    <dd>
+                      Tiết {group.periods.map((period) => period.$numberInt).join(", ")}
+                    </dd>
+                    <dd>Giảng đường: {group.place}</dd>
+                    <dd>Giảng viên: {group.teacher}</dd>
                   </Fragment>
                 );
               })}
@@ -106,13 +101,13 @@ export const ClassMembers: React.FC<{}> = () => {
 
       {classMembersContext?.studentsInfo && classMembersContext?.studentsInfo.length && (
         <div className="students">
-          {classMembersContext?.classInfo?.Nhom && classMembersContext.classInfo.Nhom.length > 1 && (
+          {classMembersContext?.classInfo?.groups && classMembersContext.classInfo.groups.length > 1 && (
             <div className="students--filter">
               <select value={group} onChange={handleChangeGroup}>
-                {classMembersContext?.classInfo?.Nhom.map((group, groupIndex) => {
+                {classMembersContext?.classInfo?.groups.map((group, groupIndex) => {
                   return (
-                    <option key={groupIndex} value={group.Ten}>
-                      {getGroupName(group.Ten)}
+                    <option key={groupIndex} value={group.note}>
+                      {getGroupName(group.note)}
                     </option>
                   );
                 })}
@@ -134,19 +129,19 @@ export const ClassMembers: React.FC<{}> = () => {
               {classMembersContext.studentsInfo
                 ?.filter((student) => {
                   if (group !== "CL") {
-                    return student.Nhom === group;
+                    return student.classNote === group;
                   }
                   return true;
                 })
                 .map((student) => {
                   return (
-                    <tr key={student.MaSV}>
-                      <td>{student.MaSV}</td>
-                      <td>{student.HoVaTen}</td>
-                      <td>{student.NgaySinh}</td>
-                      <td>{student.LopKhoaHoc}</td>
-                      <td>{student.Nhom}</td>
-                      <td>{student.GhiChu}</td>
+                    <tr key={student.studentId}>
+                      <td>{student.studentId}</td>
+                      <td>{student.studentName}</td>
+                      <td>{student.studentBirthday}</td>
+                      <td>{student.studentBirthday}</td>
+                      <td>{student.classNote}</td>
+                      <td>{student.studentNote}</td>
                     </tr>
                   );
                 })}
