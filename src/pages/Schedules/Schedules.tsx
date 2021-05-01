@@ -22,12 +22,18 @@ const Schedule: React.FC = () => {
     try {
       const res = await axiosSchedulesInstance({
         params: {
-          studentId: studentId
+          studentId: studentId,
         },
         method: "GET",
       });
       const json = res.data as SchedulesResponse;
-      schedulesContext?.setStudentInfo({ _id: json._id, studentId: json.studentId, studentName: json.studentName, studentCourse: json.studentCourse, studentBirthday: json.studentBirthday });
+      schedulesContext?.setStudentInfo({
+        _id: json._id,
+        studentId: json.studentId,
+        studentName: json.studentName,
+        studentCourse: json.studentCourse,
+        studentBirthday: json.studentBirthday,
+      });
       schedulesContext?.setClassesInfo(json.classes);
     } catch (err) {
       displayOverlay(false);
@@ -108,9 +114,7 @@ const Schedule: React.FC = () => {
               Ngày sinh: <span className="student--birthday">{schedulesContext?.studentInfo?.studentBirthday}</span>
             </div>
           </div>
-          <button className="btn btn-excel student--excel">
-            Export Excel
-          </button>
+          <button className="btn btn-excel student--excel">Export Excel</button>
         </div>
       )}
 

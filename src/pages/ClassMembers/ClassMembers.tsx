@@ -35,7 +35,14 @@ export const ClassMembers: React.FC<{}> = () => {
         },
       });
       const json = res.data as ClassMembersResponse;
-      classMembersContext?.setClassInfo({ _id: json._id, classId: json.classId, credit: json.credit, subjectId: json.subjectId, subjectName: json.subjectName, groups: json.groups });
+      classMembersContext?.setClassInfo({
+        _id: json._id,
+        classId: json.classId,
+        credit: json.credit,
+        subjectId: json.subjectId,
+        subjectName: json.subjectName,
+        groups: json.groups,
+      });
       classMembersContext?.setStudentsInfo(json.students);
     } catch (err) {
       displayOverlay(false);
@@ -83,12 +90,8 @@ export const ClassMembers: React.FC<{}> = () => {
                 return (
                   <Fragment key={groupIndex}>
                     <dt>{getGroupName(group.note)}:</dt>
-                    <dd>
-                      Thứ {group.weekDay.$numberInt}
-                    </dd>
-                    <dd>
-                      Tiết {group.periods.map((period) => period.$numberInt).join(", ")}
-                    </dd>
+                    <dd>Thứ {group.weekDay.$numberInt}</dd>
+                    <dd>Tiết {group.periods.map((period) => period.$numberInt).join(", ")}</dd>
                     <dd>Giảng đường: {group.place}</dd>
                     <dd>Giảng viên: {group.teacher}</dd>
                   </Fragment>

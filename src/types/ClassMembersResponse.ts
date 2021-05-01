@@ -5,7 +5,7 @@ interface ClassGroup {
   };
   periods: {
     $numberInt: string;
-  }[],
+  }[];
   place: string;
   teacher: string;
   note: string;
