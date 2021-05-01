@@ -53,31 +53,32 @@ const Schedule: React.FC = () => {
     }
   };
 
-  // const handleDownloadExcel = async () => {
-  //   const res = await axiosCommonInstance({
-  //     method: "POST",
-  //     url: "api/v1/export-schedule-excel",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     responseType: "arraybuffer",
-  //     data: {
-  //       StudentId: scheduleContext?.studentInfo?.MaSV,
-  //     },
-  //   });
+  const handleDownloadExcel = async () => {
+    alert("Tính năng này đang được bảo trì :(((");
+    // const res = await axiosCommonInstance({
+    //   method: "POST",
+    //   url: "api/v1/export-schedule-excel",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   responseType: "arraybuffer",
+    //   data: {
+    //     StudentId: scheduleContext?.studentInfo?.MaSV,
+    //   },
+    // });
 
-  //   const url = window.URL.createObjectURL(
-  //     new Blob([res.data], {
-  //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  //     })
-  //   );
-  //   const link = document.createElement("a");
-  //   link.href = url;
-  //   link.setAttribute("download", "Schedule.xlsx");
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  // };
+    // const url = window.URL.createObjectURL(
+    //   new Blob([res.data], {
+    //     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    //   })
+    // );
+    // const link = document.createElement("a");
+    // link.href = url;
+    // link.setAttribute("download", "Schedule.xlsx");
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+  };
 
   useEffect(() => {
     studentIdInput.current?.focus();
@@ -114,7 +115,9 @@ const Schedule: React.FC = () => {
               Ngày sinh: <span className="student--birthday">{schedulesContext?.studentInfo?.studentBirthday}</span>
             </div>
           </div>
-          <button className="btn btn-excel student--excel">Export Excel</button>
+          <button className="btn btn-excel student--excel" onClick={handleDownloadExcel}>
+            Export Excel
+          </button>
         </div>
       )}
 
