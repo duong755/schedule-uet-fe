@@ -7,7 +7,7 @@ type StudentsInfo = Pick<ClassMembersResponse, "students">["students"];
 
 export type ClassMembersContextData = {
   classInfo: ClassInfo | null | undefined;
-  studentsInfo: Pick<ClassMembersResponse, "students">["students"] | null | undefined;
+  studentsInfo: StudentsInfo | null | undefined;
   setClassInfo: (classInfo: ClassInfo | null | undefined) => any;
   setStudentsInfo: (studentsInfo: StudentsInfo | null | undefined) => any;
 };

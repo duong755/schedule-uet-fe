@@ -1,19 +1,22 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-import { API_DOMAIN } from "../constants";
-import { displayOverlay } from "../common/helpers";
+import { CLASSMEMBERS, SCHEDULES } from "../constants";
+import { displayOverlay } from "./helpers";
 
 const overlayInterceptor = (config: AxiosRequestConfig): AxiosRequestConfig => {
   displayOverlay(true);
   return config;
 };
 
-const axiosCommonInstance = axios.create({
-  baseURL: API_DOMAIN,
+const axiosSchedulesInstance = axios.create({
+  baseURL: SCHEDULES,
+});
+const axiosClassMembersInstance = axios.create({
+  baseURL: CLASSMEMBERS,
 });
 
-axiosCommonInstance.interceptors.request.use(overlayInterceptor);
-axiosCommonInstance.interceptors.response.use(
+axiosSchedulesInstance.interceptors.request.use(overlayInterceptor);
+axiosSchedulesInstance.interceptors.response.use(
   (value) => {
     displayOverlay(false);
     return value;
@@ -24,4 +27,16 @@ axiosCommonInstance.interceptors.response.use(
   }
 );
 
-export { axiosCommonInstance };
+axiosClassMembersInstance.interceptors.request.use(overlayInterceptor);
+axiosClassMembersInstance.interceptors.response.use(
+  (value) => {
+    displayOverlay(false);
+    return value;
+  },
+  (error) => {
+    displayOverlay(false);
+    return error;
+  }
+);
+
+export { axiosSchedulesInstance, axiosClassMembersInstance };

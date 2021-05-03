@@ -1,19 +1,27 @@
-interface Class {
+export interface Class {
+  _id: string;
   subjectId: string;
   subjectName: string;
-  credit: number;
+  credit: {
+    $numberDouble: string;
+  };
   classId: string;
   teacher: string;
-  numberOfStudents: number;
+  numberOfStudents: {
+    $numberDouble: string;
+  };
   session: string;
-  weekDay: number;
-  periods: number[];
+  weekDay: {
+    $numberDouble: string;
+  };
+  periods: {
+    $numberDouble: string;
+  }[];
   place: string;
   note: string;
-  studentNote: string;
 }
 
-export interface ScheduleResponse {
+export interface SchedulesResponse {
   _id: string;
   studentId: string;
   studentName: string;

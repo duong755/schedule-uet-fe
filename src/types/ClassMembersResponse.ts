@@ -1,25 +1,39 @@
+interface ClassGroup {
+  session: string;
+  weekDay: {
+    $numberInt: number;
+  };
+  periods: {
+    $numberInt: string;
+  }[];
+  place: string;
+  teacher: string;
+  note: string;
+}
+
 interface Student {
-  _id: string;
+  _id: {
+    $oid: string;
+  };
   studentId: string;
   studentName: string;
   studentBirthday: string;
   studentCourse: string;
-  studentNote: string;
+  classId: string;
   classNote: string;
+  studentNote: string;
 }
 
 export interface ClassMembersResponse {
-  _id: string;
+  _id: {
+    $oid: string;
+  };
+  classId: string;
   subjectId: string;
   subjectName: string;
-  credit: number;
-  classId: string;
-  teacher: string;
-  numberOfStudents: number;
-  session: string;
-  weekDay: number;
-  periods: number[];
-  place: string;
-  note: string;
+  credit: {
+    $numberInt: string;
+  };
+  groups: ClassGroup[];
   students: Student[];
 }
