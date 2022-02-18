@@ -34,6 +34,11 @@ export const ClassMembers: React.FC<{}> = () => {
           classId: classId.toUpperCase(),
         },
       });
+
+      if (res.data.message) {
+        throw new Error(res.data.message);
+      }
+
       const json = res.data as ClassMembersResponse;
       classMembersContext?.setClassInfo({
         _id: json._id,
@@ -46,7 +51,7 @@ export const ClassMembers: React.FC<{}> = () => {
       classMembersContext?.setStudentsInfo(json.students);
     } catch (err) {
       displayOverlay(false);
-      console.error(err);
+      console.info(err);
     } finally {
       setClassId("");
     }
